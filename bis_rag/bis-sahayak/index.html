@@ -1,0 +1,3925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>BIS Sahayak — Your AI Assistant for Indian Standards</title>
+<link rel="icon" type="image/png" href="bis_emblem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===================== Design System & Tokens ===================== */
+  :root {
+    --bg-app: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-sidebar: #FFFFFF;
+    --bg-subtle: #F1F5F9;
+    --bg-hover: #F8FAFC;
+    
+    --border-color: #E2E8F0;
+    --border-subtle: #EDF2F7;
+    --border-focus: #7C3AED;
+    
+    --text-main: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    
+    --bis-blue: #0B4F9C;
+    --bis-blue-hover: #093F7E;
+    --bis-blue-subtle: #EFF6FF;
+    --bis-blue-border: #BFDBFE;
+    --bis-blue-active: #DBEAFE;
+
+    /* ---- Purple Gradients & Warm Yellow Accents ---- */
+    --grad-purple: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6D28D9 100%);
+    --grad-purple-hover: linear-gradient(135deg, #4338CA 0%, #6D28D9 50%, #5B21B6 100%);
+    --grad-purple-subtle: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+    --grad-purple-border: #DDD6FE;
+    
+    --accent-yellow: #F59E0B;
+    --accent-yellow-gold: #EAB308;
+    --accent-yellow-bright: #FDE047;
+    --accent-yellow-light: #FEF08A;
+    --grad-yellow-pill: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+    --grad-yellow-border: #FDE68A;
+    
+    --shadow-purple-glow: 0 8px 24px -2px rgba(124, 58, 237, 0.35), 0 4px 12px -2px rgba(245, 158, 11, 0.2);
+    --shadow-purple-glow-hover: 0 12px 30px -2px rgba(124, 58, 237, 0.48), 0 6px 16px -2px rgba(245, 158, 11, 0.32);
+    
+    --success: #15803D;
+    --success-bg: #F0FDF4;
+    --success-border: #BBF7D0;
+    
+    --danger: #B91C1C;
+    --danger-bg: #FEF2F2;
+    --danger-border: #FECACA;
+    
+    --warning: #B45309;
+    --warning-bg: #FFFBEB;
+    --warning-border: #FDE68A;
+    
+    --radius-full: 9999px;
+    --radius-xl: 18px;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --radius-sm: 6px;
+    
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+    
+    --sidebar-width: 270px;
+    --sidebar-width-tablet: 230px;
+    --topbar-height: 58px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-app);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  button, input, textarea, select {
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: #E0E7FF;
+    color: #4338CA;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+  :focus-visible {
+    outline: 2px solid #7C3AED;
+    outline-offset: 2px;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ===================== Toast Notifications ===================== */
+  #toastContainer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--text-main);
+    color: #FFFFFF;
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    animation: toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ==========================================================================
+     1. AUTH SCREEN (Login & Sign Up)
+     ========================================================================== */
+  #authScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(900px 500px at 15% 0%, rgba(124, 58, 237, 0.08) 0%, transparent 60%),
+      radial-gradient(800px 500px at 85% 100%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+      radial-gradient(1000px 500px at 50% 50%, #EFF6FF 0%, transparent 70%),
+      var(--bg-app);
+    padding: 20px;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: 34px 32px 28px;
+    animation: cardAppear 0.4s ease both;
+    text-align: center;
+  }
+  @keyframes cardAppear {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .auth-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .auth-logo-img {
+    max-width: 270px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 4px;
+  }
+
+  .auth-tabs {
+    display: flex;
+    background: var(--bg-subtle);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+  .auth-tab-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    transition: all 0.15s ease;
+  }
+  .auth-tab-btn.active {
+    background: var(--bg-surface);
+    color: #6D28D9;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .form-alert {
+    display: none;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .form-alert.error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+  }
+  .form-alert.success {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--success-bg);
+    color: var(--success);
+    border: 1px solid var(--success-border);
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .form-group label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .form-group label .req {
+    color: var(--danger);
+    margin-left: 2px;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-wrapper input {
+    width: 100%;
+    padding: 10px 13px;
+    font-size: 14px;
+    color: var(--text-main);
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input-wrapper input:focus {
+    outline: none;
+    border-color: #7C3AED;
+    box-shadow: 0 0 0 3.5px rgba(124, 58, 237, 0.15);
+  }
+  .input-wrapper .toggle-pwd-btn {
+    position: absolute;
+    right: 10px;
+    color: var(--text-muted);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    border-radius: var(--radius-sm);
+  }
+  .input-wrapper .toggle-pwd-btn:hover {
+    color: var(--text-secondary);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 11px;
+    background: var(--grad-purple);
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-purple-glow);
+    transition: background 0.15s, transform 0.1s, opacity 0.15s, box-shadow 0.15s;
+    margin-top: 8px;
+  }
+  .btn-submit:hover:not(:disabled) {
+    background: var(--grad-purple-hover);
+    box-shadow: var(--shadow-purple-glow-hover);
+    transform: translateY(-1px);
+  }
+  .btn-submit:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+  .btn-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .auth-footer a {
+    color: #6D28D9;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .auth-footer a:hover {
+    text-decoration: underline;
+  }
+
+  .demo-note {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  /* ==========================================================================
+     2. HOME / LANDING PAGE
+     ========================================================================== */
+  #homeScreen {
+    min-height: 100vh;
+    background:
+      radial-gradient(1100px 600px at 10% 0%, rgba(124, 58, 237, 0.05) 0%, transparent 60%),
+      radial-gradient(900px 500px at 90% 15%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+      var(--bg-app);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Header */
+  .home-header {
+    height: var(--topbar-height);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+  .home-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .btn-menu-drawer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    transition: all 0.15s ease;
+  }
+  .btn-menu-drawer:hover {
+    background: #F3F0FF;
+    border-color: #DDD6FE;
+    color: #6D28D9;
+  }
+  .btn-menu-drawer svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .home-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .home-brand-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  .home-brand-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+  }
+  .home-brand-badge {
+    font-size: 10px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    color: #B45309;
+    border: 1px solid #FCD34D;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    box-shadow: 0 1px 2px rgba(245, 158, 11, 0.12);
+  }
+
+  /* Home Drawer Menu */
+  #homeDrawerOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 60;
+  }
+  #homeDrawerOverlay.show {
+    display: block;
+  }
+  .home-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-color);
+    z-index: 65;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 18px 14px;
+    box-shadow: var(--shadow-lg);
+  }
+  .home-drawer.open {
+    transform: translateX(0);
+  }
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px 18px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 12px;
+  }
+  .drawer-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .drawer-user-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  .drawer-user-role {
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+
+  .drawer-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+  }
+  .drawer-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    text-align: left;
+    transition: all 0.12s ease;
+  }
+  .drawer-nav-item:hover {
+    background: var(--bg-subtle);
+    color: var(--text-main);
+  }
+  .drawer-nav-item.active {
+    background: var(--grad-purple-subtle);
+    color: #6D28D9;
+    font-weight: 600;
+  }
+  .drawer-nav-item svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+  
+  /* Purplish button with golden yellow accent in drawer */
+  .drawer-nav-item.highlight {
+    background: var(--grad-purple);
+    color: #FFFFFF;
+    font-weight: 600;
+    margin: 8px 0;
+    box-shadow: var(--shadow-purple-glow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .drawer-nav-item.highlight:hover {
+    background: var(--grad-purple-hover);
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-purple-glow-hover);
+  }
+  .drawer-nav-item.highlight svg {
+    color: var(--accent-yellow-bright);
+  }
+  .drawer-highlight-sparkle {
+    font-size: 11px;
+    background: rgba(254, 240, 138, 0.25);
+    border: 1px solid rgba(253, 224, 71, 0.4);
+    color: #FEF08A;
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+  }
+
+  .drawer-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  /* Home Main Content Container */
+  .home-main-container {
+    flex: 1;
+    max-width: 1140px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    display: grid;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 48px;
+    align-items: center;
+    padding: 20px 0;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    background: var(--grad-yellow-pill);
+    border: 1px solid var(--grad-yellow-border);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    color: #92400E;
+    width: fit-content;
+    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);
+  }
+  .hero-badge-spark {
+    color: #D97706;
+    font-size: 13px;
+  }
+  .hero-title {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    color: var(--text-main);
+  }
+  .hero-subtitle {
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 540px;
+  }
+  
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  
+  /* Purplish button with Yellow Accent */
+  .btn-hero-start {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 26px;
+    background: var(--grad-purple);
+    color: #FFFFFF;
+    font-size: 15.5px;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-purple-glow);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-hero-start:hover {
+    background: var(--grad-purple-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-purple-glow-hover);
+  }
+  .btn-hero-start svg {
+    width: 17px;
+    height: 17px;
+    color: var(--accent-yellow-bright);
+    transition: transform 0.15s ease;
+  }
+  .btn-hero-start:hover svg {
+    transform: translateX(4px);
+  }
+  .btn-yellow-badge {
+    background: rgba(254, 240, 138, 0.22);
+    border: 1px solid rgba(253, 224, 71, 0.5);
+    color: #FEF08A;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.02em;
+  }
+
+  .hero-meta-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .hero-meta-points span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero-meta-points span .dot-gold {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-yellow);
+  }
+
+  /* Architectural Flow Diagram with Purple & Gold Accents */
+  .hero-diagram-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+  .diagram-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+  }
+  .diagram-node {
+    padding: 10px 18px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    box-shadow: var(--shadow-xs);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+  }
+  .diagram-node.root {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%);
+    border-color: #DDD6FE;
+    color: #4338CA;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+  }
+  .diagram-branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+  .diagram-branch-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .diagram-branch-card:hover {
+    transform: translateY(-2px);
+    border-color: #DDD6FE;
+  }
+  .diagram-branch-card .icon {
+    font-size: 18px;
+  }
+  .diagram-branch-card .title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .diagram-branch-card .code {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: ui-monospace, monospace;
+  }
+
+  .diagram-connector {
+    width: 2px;
+    height: 14px;
+    background: #CBD5E1;
+  }
+  
+  /* Purplish Engine Node with Warm Yellow Glow Indicator */
+  .diagram-node.engine {
+    background: var(--grad-purple);
+    border-color: #7C3AED;
+    color: #FFFFFF;
+    font-weight: 700;
+    padding: 10px 22px;
+    box-shadow: var(--shadow-purple-glow);
+  }
+  .diagram-node.engine svg {
+    color: var(--accent-yellow-bright);
+  }
+
+  .diagram-node.output {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+    color: var(--success);
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 8px 16px;
+  }
+
+  /* About Section */
+  .section-block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    scroll-margin-top: 80px;
+  }
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .section-tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #7C3AED;
+  }
+  .section-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+  }
+  
+  .about-content-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 36px;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .about-lead-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .about-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .about-highlight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg-subtle);
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    color: var(--text-main);
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+  }
+  .about-highlight-item:hover {
+    border-color: #DDD6FE;
+    background: #FAF8FF;
+  }
+  .about-highlight-item svg {
+    width: 18px;
+    height: 18px;
+    color: #7C3AED;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* How It Works Section */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .step-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .step-card:hover {
+    transform: translateY(-3px);
+    border-color: #DDD6FE;
+    box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.1);
+  }
+  
+  /* Numbered gradient badges with yellow accent */
+  .step-num {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--accent-yellow-light);
+    background: var(--grad-purple);
+    width: fit-content;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+  }
+  .step-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Purplish Floating Action Button with Yellow Accent */
+  .btn-floating-start {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 22px;
+    background: var(--grad-purple);
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-purple-glow);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-floating-start:hover {
+    background: var(--grad-purple-hover);
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: var(--shadow-purple-glow-hover);
+  }
+  .btn-floating-start svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent-yellow-bright);
+  }
+  .btn-floating-start .sparkle-gold {
+    color: var(--accent-yellow-light);
+    font-size: 12px;
+  }
+
+  /* ==========================================================================
+     3. APP SHELL LAYOUT (Chat & Conversation Interface)
+     ========================================================================== */
+  #appShell {
+    height: 100vh;
+    display: flex;
+    position: relative;
+    background: var(--bg-app);
+    overflow: hidden;
+  }
+
+  /* Sidebar Overlay (Mobile) */
+  #sidebarOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 40;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  #sidebarOverlay.show {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 16px 12px;
+    z-index: 45;
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px 14px;
+  }
+  .sidebar-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+  }
+  .sidebar-logo-img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 7px;
+    flex-shrink: 0;
+  }
+  .sidebar-brand-name {
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-main);
+  }
+  .sidebar-brand-badge {
+    font-size: 10px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    color: #B45309;
+    border: 1px solid #FCD34D;
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+  }
+
+  .sidebar-home-link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    transition: background 0.12s, color 0.12s;
+  }
+  .sidebar-home-link:hover {
+    background: #F3F0FF;
+    color: #6D28D9;
+  }
+  .sidebar-home-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Purplish subtle New Chat button in sidebar */
+  .btn-new-chat {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--grad-purple-subtle);
+    border: 1px solid var(--grad-purple-border);
+    color: #6D28D9;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 700;
+    transition: all 0.15s ease;
+    margin-bottom: 12px;
+  }
+  .btn-new-chat:hover {
+    background: linear-gradient(135deg, #E0E7FF 0%, #EDE9FE 100%);
+    border-color: #C4B5FD;
+    color: #5B21B6;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+  }
+  .btn-new-chat svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    color: #7C3AED;
+  }
+
+  .sidebar-search-box {
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .sidebar-search-box svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .sidebar-search-box input {
+    width: 100%;
+    padding: 8px 28px 8px 32px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    background: var(--bg-app);
+    color: var(--text-main);
+    transition: all 0.15s ease;
+  }
+  .sidebar-search-box input:focus {
+    outline: none;
+    border-color: #7C3AED;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  }
+  .sidebar-search-box .clear-search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    padding: 2px;
+    display: none;
+    border-radius: 50%;
+  }
+  .sidebar-search-box .clear-search-btn.show {
+    display: flex;
+  }
+  .sidebar-search-box .clear-search-btn:hover {
+    color: var(--text-main);
+  }
+
+  .sidebar-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 4px 8px 8px;
+  }
+
+  .chat-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 2px;
+  }
+
+  .chat-item-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: var(--radius-md);
+    transition: background 0.12s;
+  }
+  .chat-item-wrapper:hover {
+    background: var(--bg-subtle);
+  }
+  .chat-item-wrapper.active {
+    background: var(--grad-purple-subtle);
+  }
+
+  .chat-item-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    font-size: 13.5px;
+    color: var(--text-main);
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: var(--radius-md);
+  }
+  .chat-item-wrapper.active .chat-item-btn {
+    color: #6D28D9;
+    font-weight: 600;
+  }
+  .chat-item-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+  .chat-item-wrapper.active .chat-item-btn svg {
+    color: #7C3AED;
+  }
+  .chat-item-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .chat-item-more-btn {
+    opacity: 0;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    margin-right: 4px;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
+  }
+  .chat-item-wrapper:hover .chat-item-more-btn,
+  .chat-item-wrapper.active .chat-item-more-btn {
+    opacity: 1;
+  }
+  .chat-item-more-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text-main);
+  }
+
+  .chat-empty-state {
+    padding: 24px 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* Sidebar Footer */
+  .sidebar-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .sidebar-foot-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    text-align: left;
+    transition: background 0.12s, color 0.12s;
+  }
+  .sidebar-foot-btn:hover {
+    background: var(--bg-subtle);
+    color: var(--text-main);
+  }
+  .sidebar-foot-btn svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+
+  .profile-menu-container {
+    position: relative;
+  }
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 8px;
+    border-radius: var(--radius-md);
+    text-align: left;
+    transition: background 0.12s;
+  }
+  .profile-btn:hover {
+    background: var(--bg-subtle);
+  }
+  .avatar-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-full);
+    background: var(--grad-purple);
+    color: var(--accent-yellow-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+  }
+  .profile-info {
+    flex: 1;
+    overflow: hidden;
+    line-height: 1.25;
+  }
+  .profile-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .profile-role {
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+
+  /* Popover Menus */
+  .popover-menu {
+    position: absolute;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 5px;
+    min-width: 150px;
+    z-index: 100;
+    animation: popoverIn 0.15s ease both;
+  }
+  @keyframes popoverIn {
+    from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .popover-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    text-align: left;
+    transition: background 0.12s;
+  }
+  .popover-item:hover {
+    background: var(--bg-subtle);
+  }
+  .popover-item.danger {
+    color: var(--danger);
+  }
+  .popover-item.danger:hover {
+    background: var(--danger-bg);
+  }
+  .popover-item svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  /* Main Area */
+  .main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    position: relative;
+    background: var(--bg-app);
+  }
+
+  .topbar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--topbar-height);
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    flex-shrink: 0;
+    z-index: 30;
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topbar-logo-img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  .icon-btn:hover {
+    background: var(--bg-subtle);
+    color: var(--text-main);
+  }
+  .icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .topbar-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  /* Welcome View in Chat Area */
+  .welcome-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    overflow-y: auto;
+  }
+  .welcome-content {
+    width: 100%;
+    max-width: 680px;
+    text-align: center;
+  }
+  .welcome-logo-container {
+    margin-bottom: 16px;
+  }
+  .welcome-logo-img {
+    max-width: 310px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto 8px;
+    display: block;
+  }
+  .welcome-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  .welcome-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  /* Composer Box */
+  .composer-wrapper {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .composer {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    padding: 10px 12px 10px 18px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .composer:focus-within {
+    border-color: #7C3AED;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+  }
+  .composer textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--text-main);
+    background: transparent;
+    max-height: 140px;
+    padding: 6px 0;
+  }
+  .composer textarea::placeholder {
+    color: var(--text-muted);
+  }
+  
+  /* Purplish Send Button */
+  .btn-send {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-md);
+    background: var(--grad-purple);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-purple-glow);
+    transition: background 0.15s, transform 0.1s, opacity 0.15s, box-shadow 0.15s;
+  }
+  .btn-send:hover:not(:disabled) {
+    background: var(--grad-purple-hover);
+    box-shadow: var(--shadow-purple-glow-hover);
+    transform: scale(1.03);
+  }
+  .btn-send:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+  .btn-send:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .btn-send svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent-yellow-bright);
+  }
+
+  /* Suggestions */
+  .suggestions-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .suggestion-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.15s ease;
+    box-shadow: var(--shadow-xs);
+  }
+  .suggestion-chip:hover {
+    border-color: #DDD6FE;
+    background: var(--grad-purple-subtle);
+    color: #6D28D9;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  .suggestion-chip svg {
+    width: 14px;
+    height: 14px;
+    color: #7C3AED;
+  }
+
+  /* Chat View Container */
+  .chat-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .chat-messages-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px 16px;
+  }
+  .chat-messages-container {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  /* Messages */
+  .message-row {
+    display: flex;
+    gap: 14px;
+    animation: msgFadeIn 0.25s ease both;
+  }
+  @keyframes msgFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .message-row.user {
+    flex-direction: row-reverse;
+  }
+  .message-row.user .msg-avatar {
+    background: var(--text-main);
+    color: var(--accent-yellow-light);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .message-row.ai .msg-avatar {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+  }
+  .message-row.ai .msg-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .msg-body {
+    max-width: 82%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .message-row.user .msg-body {
+    align-items: flex-end;
+  }
+
+  .msg-content {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text-main);
+  }
+  .message-row.user .msg-content {
+    background: var(--text-main);
+    color: #FFFFFF;
+    padding: 12px 18px;
+    border-radius: var(--radius-lg);
+    border-bottom-right-radius: 4px;
+    word-break: break-word;
+  }
+  .message-row.ai .msg-content {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: 16px 20px;
+    border-radius: var(--radius-lg);
+    border-bottom-left-radius: 4px;
+    box-shadow: var(--shadow-xs);
+  }
+
+  /* Formatted Content */
+  .msg-content h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--bis-blue);
+    margin: 14px 0 6px;
+  }
+  .msg-content h3:first-child {
+    margin-top: 0;
+  }
+  .msg-content p {
+    margin-bottom: 10px;
+  }
+  .msg-content p:last-child {
+    margin-bottom: 0;
+  }
+  .msg-content ul, .msg-content ol {
+    margin: 8px 0 12px 20px;
+  }
+  .msg-content li {
+    margin-bottom: 5px;
+  }
+  .msg-content code {
+    font-size: 13px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  .msg-content .highlight-box {
+    background: var(--grad-purple-subtle);
+    border-left: 3.5px solid #7C3AED;
+    padding: 10px 14px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+
+  /* Standards Table */
+  .standards-table-wrapper {
+    overflow-x: auto;
+    margin: 14px 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+  .standards-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+  .standards-table th {
+    background: var(--bg-subtle);
+    color: var(--text-main);
+    font-weight: 600;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+  .standards-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  .standards-table tr:last-child td {
+    border-bottom: none;
+  }
+  .standards-table tr:hover td {
+    background: #FAFCFE;
+  }
+
+  /* Message Actions */
+  .msg-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+  }
+  .btn-msg-action {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: all 0.12s ease;
+  }
+  .btn-msg-action:hover {
+    color: var(--text-main);
+    background: var(--bg-subtle);
+  }
+  .btn-msg-action svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* Sources Card */
+  .sources-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    width: 100%;
+    box-shadow: var(--shadow-xs);
+  }
+  .sources-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .sources-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--bis-blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sources-title svg {
+    width: 14px;
+    height: 14px;
+  }
+  .source-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .source-item:first-of-type {
+    border-top: none;
+    padding-top: 2px;
+  }
+  .source-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .source-info svg {
+    width: 15px;
+    height: 15px;
+    color: var(--bis-blue);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .source-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .source-name {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  .source-clause {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .source-action-btn {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6D28D9;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    background: #F3F0FF;
+    flex-shrink: 0;
+    transition: background 0.12s;
+  }
+  .source-action-btn:hover {
+    background: #EDE9FE;
+  }
+
+  /* Typing Indicator */
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    width: fit-content;
+  }
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7C3AED;
+    animation: typingBounce 1.2s infinite ease-in-out;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* Error & Retry State */
+  .msg-error-box {
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    color: var(--danger);
+    font-size: 13.5px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .btn-retry {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--danger);
+    background: #FFFFFF;
+    border: 1px solid var(--danger-border);
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.12s;
+  }
+  .btn-retry:hover {
+    background: #FEE2E2;
+  }
+
+  /* Bottom Chat Composer */
+  .chat-bottom-bar {
+    padding: 14px 20px 20px;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-surface);
+  }
+  .chat-bottom-bar .composer {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .chat-disclaimer {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    max-width: 760px;
+    margin: 8px auto 0;
+  }
+
+  /* ==========================================================================
+     4. MODALS
+     ========================================================================== */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.show {
+    display: flex;
+  }
+  .modal-card {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    padding: 24px;
+    animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .modal-close-btn {
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: var(--radius-sm);
+  }
+  .modal-close-btn:hover {
+    color: var(--text-main);
+    background: var(--bg-subtle);
+  }
+  .modal-body {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .btn-modal-cancel {
+    padding: 8px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    background: var(--bg-subtle);
+  }
+  .btn-modal-cancel:hover {
+    background: var(--border-color);
+  }
+  .btn-modal-confirm {
+    padding: 8px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #FFFFFF;
+    border-radius: var(--radius-md);
+    background: var(--grad-purple);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  }
+  .btn-modal-confirm:hover {
+    background: var(--grad-purple-hover);
+  }
+  .btn-modal-confirm.danger {
+    background: var(--danger);
+    box-shadow: none;
+  }
+  .btn-modal-confirm.danger:hover {
+    background: #991B1B;
+  }
+
+  /* Setting modal items */
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .setting-row:last-child {
+    border-bottom: none;
+  }
+  .setting-label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  .setting-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .setting-badge {
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--grad-purple-subtle);
+    color: #6D28D9;
+    border: 1px solid #DDD6FE;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  /* ==========================================================================
+     5. RESPONSIVE STYLING
+     ========================================================================== */
+  @media (max-width: 1024px) {
+    :root { --sidebar-width: var(--sidebar-width-tablet); }
+    .hero-section {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .hero-title { font-size: 34px; }
+    .about-content-card {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .topbar { display: flex; }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 82vw;
+      max-width: 300px;
+      transform: translateX(-100%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-lg);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .home-header { padding: 0 16px; }
+    .hero-title { font-size: 28px; }
+    .hero-subtitle { font-size: 15px; }
+    .steps-grid { grid-template-columns: 1fr; gap: 14px; }
+    .welcome-title { font-size: 24px; }
+    .welcome-subtitle { font-size: 13.5px; margin-bottom: 24px; }
+    .chat-messages-scroll { padding: 18px 14px 10px; }
+    .msg-body { max-width: 90%; }
+    .chat-bottom-bar { padding: 12px 14px 16px; }
+    .auth-card { padding: 28px 20px 24px; }
+    .btn-floating-start {
+      bottom: 20px;
+      right: 20px;
+      padding: 11px 18px;
+      font-size: 13.5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer" aria-live="polite"></div>
+
+<!-- ==========================================================================
+     1. AUTH SCREEN (Login & Sign Up)
+     ========================================================================== -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-header">
+      <!-- Official BIS Sahayak Logo -->
+      <img src="bis_logo.png" alt="BIS Sahayak — Your AI Assistant for Indian Standards" class="auth-logo-img" />
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" id="tabLoginBtn" type="button">Log In</button>
+      <button class="auth-tab-btn" id="tabSignupBtn" type="button">Sign Up</button>
+    </div>
+
+    <!-- Alert Message Box -->
+    <div class="form-alert" id="authAlert"></div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginIdentifier">Email or username <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <input id="loginIdentifier" type="text" placeholder="name@example.com" autocomplete="username" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Password <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="toggle-pwd-btn" data-target="loginPassword" aria-label="Toggle password visibility">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="loginSubmitBtn">
+        <span>Log in</span>
+      </button>
+    </form>
+
+    <!-- SIGN UP FORM -->
+    <form id="signupForm" class="hidden">
+      <div class="form-group">
+        <label for="signupName">Full Name <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <input id="signupName" type="text" placeholder="e.g. Ramesh Kumar" autocomplete="name" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="signupEmail">Email Address <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <input id="signupEmail" type="email" placeholder="name@example.com" autocomplete="email" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="signupPassword">Password (min. 6 characters) <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <input id="signupPassword" type="password" placeholder="••••••••" autocomplete="new-password" required />
+          <button type="button" class="toggle-pwd-btn" data-target="signupPassword" aria-label="Toggle password visibility">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="signupConfirmPassword">Confirm Password <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <input id="signupConfirmPassword" type="password" placeholder="••••••••" autocomplete="new-password" required />
+          <button type="button" class="toggle-pwd-btn" data-target="signupConfirmPassword" aria-label="Toggle password visibility">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="signupSubmitBtn">
+        <span>Create Account</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span id="authToggleHint">Don't have an account?</span>
+      <a href="#" id="authToggleLink">Sign up</a>
+    </div>
+
+    <p class="demo-note">Prototype Demonstration &bull; Local Session Mode</p>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     2. HOME / LANDING PAGE VIEW
+     ========================================================================== -->
+<div id="homeScreen" class="hidden">
+  <!-- Left Menu Drawer Backdrop Overlay -->
+  <div id="homeDrawerOverlay"></div>
+
+  <!-- Left Menu Slide-out Drawer -->
+  <nav class="home-drawer" id="homeMenuDrawer" aria-label="Navigation Menu">
+    <div class="drawer-header">
+      <div class="drawer-user-info">
+        <span class="avatar-chip" id="drawerAvatarChip">--</span>
+        <div>
+          <div class="drawer-user-name" id="drawerUserName">User</div>
+          <div class="drawer-user-role">BIS Portal User</div>
+        </div>
+      </div>
+      <button class="icon-btn" id="closeDrawerBtn" aria-label="Close Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="drawer-nav">
+      <button class="drawer-nav-item active" id="drawerHomeBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+
+      <!-- Purplish highlight button with yellow accent tag -->
+      <button class="drawer-nav-item highlight" id="drawerStartChatBtn">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Start New Chat</span>
+        </div>
+        <span class="drawer-highlight-sparkle">✨ AI</span>
+      </button>
+
+      <button class="drawer-nav-item" id="drawerAboutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>About BIS Sahayak</span>
+      </button>
+
+      <button class="drawer-nav-item" id="drawerHowItWorksBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>How It Works</span>
+      </button>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="drawer-nav-item" id="drawerSettingsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+        <span>Settings</span>
+      </button>
+      <button class="drawer-nav-item" id="drawerProfileBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </button>
+      <button class="drawer-nav-item" id="drawerLogoutBtn" style="color: var(--danger);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <span>Log out</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Clean Top Header -->
+  <header class="home-header">
+    <div class="home-header-left">
+      <button class="btn-menu-drawer" id="homeMenuBtn" aria-label="Open Navigation Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span>Menu</span>
+      </button>
+    </div>
+
+    <div class="home-header-right" id="homeBrandLink" title="BIS Sahayak Home">
+      <img src="bis_emblem.png" alt="BIS Sahayak Emblem" class="home-brand-logo" />
+      <span class="home-brand-title">BIS Sahayak</span>
+      <span class="home-brand-badge">AI</span>
+    </div>
+  </header>
+
+  <!-- Home Main Container -->
+  <main class="home-main-container">
+    <!-- 1. Hero Section -->
+    <section class="hero-section" id="heroSection">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="hero-badge-spark">✨</span>
+          <span>National Standards AI &bull; SIH 2026 Edition</span>
+        </div>
+
+        <h1 class="hero-title">Your Intelligent Assistant for Indian Standards</h1>
+        <p class="hero-subtitle">BIS Sahayak helps you find and understand information related to Indian Standards, BIS certification, hallmarking and more.</p>
+
+        <div class="hero-actions">
+          <button type="button" class="btn-hero-start" id="heroStartChatBtn">
+            <span>Start a New Chat</span>
+            <span class="btn-yellow-badge">✨ Instant</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <div class="hero-meta-points">
+          <span><span class="dot-gold"></span> Instant IS Code Lookup</span>
+          <span><span class="dot-gold"></span> CRS Registration Guidelines</span>
+          <span><span class="dot-gold"></span> Gold Hallmarking (HUID)</span>
+        </div>
+      </div>
+
+      <!-- Right Illustrative Flow Diagram -->
+      <div class="hero-diagram-card">
+        <div class="diagram-flow">
+          <!-- Root Node -->
+          <div class="diagram-node root">
+            <img src="bis_emblem.png" alt="BIS" style="width: 20px; height: 20px; border-radius: 4px; object-fit: contain;" />
+            <span>BIS Sahayak</span>
+          </div>
+
+          <div class="diagram-connector"></div>
+
+          <!-- 3 Branching Cards -->
+          <div class="diagram-branches">
+            <div class="diagram-branch-card">
+              <span class="icon">📐</span>
+              <span class="title">Standards</span>
+              <span class="code">IS 1786 / 10500</span>
+            </div>
+            <div class="diagram-branch-card">
+              <span class="icon">🛡️</span>
+              <span class="title">Certification</span>
+              <span class="code">ISI / CRS Scheme</span>
+            </div>
+            <div class="diagram-branch-card" style="border-color: #FDE68A; background: #FFFDF5;">
+              <span class="icon">💎</span>
+              <span class="title" style="color:#92400E;">Hallmarking</span>
+              <span class="code" style="color:#B45309;">IS 1417 / HUID</span>
+            </div>
+          </div>
+
+          <div class="diagram-connector"></div>
+
+          <!-- AI Engine Node in Purplish Gradient with Yellow Accent -->
+          <div class="diagram-node engine">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <span>AI Assistant Processing</span>
+          </div>
+
+          <div class="diagram-connector"></div>
+
+          <!-- Output Node -->
+          <div class="diagram-node output">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Clear Information & References</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. About BIS Sahayak Section -->
+    <section class="section-block" id="aboutSection">
+      <div class="section-header">
+        <span class="section-tag">Overview</span>
+        <h2 class="section-title">What is BIS Sahayak?</h2>
+      </div>
+
+      <div class="about-content-card">
+        <p class="about-lead-text">
+          <strong>BIS Sahayak</strong> is an AI-powered assistant designed to simplify access to information related to Indian Standards and BIS services. It allows users to ask questions in natural language and receive clear, relevant information.
+        </p>
+
+        <div class="about-highlights">
+          <div class="about-highlight-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span>Natural language search across 21,000+ Indian Standards</span>
+          </div>
+          <div class="about-highlight-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+            <span>Direct clause citations and mandatory compliance references</span>
+          </div>
+          <div class="about-highlight-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>Structured tables for chemical & mechanical property limits</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. How It Works Section -->
+    <section class="section-block" id="howItWorksSection">
+      <div class="section-header">
+        <span class="section-tag">Simple 3-Step Process</span>
+        <h2 class="section-title">How It Works</h2>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01 — Ask</div>
+          <h3 class="step-title">Ask</h3>
+          <p class="step-desc">Ask your question in natural language regarding any product standard, testing clause, certification scheme, or hallmarking rule.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">02 — Understand</div>
+          <h3 class="step-title">Understand</h3>
+          <p class="step-desc">BIS Sahayak processes the query and identifies relevant Indian Standards, Quality Control Orders (QCOs), and regulatory guidelines.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">03 — Get Information</div>
+          <h3 class="step-title">Get Information</h3>
+          <p class="step-desc">Receive a clear answer along with relevant references, clause specifications, and parameter comparison tables where available.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Start New Chat Action Button (Purplish Gradient with Yellow Accent) -->
+  <button type="button" class="btn-floating-start" id="floatingChatBtn" aria-label="Start New Chat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"/></svg>
+    <span>Start New Chat</span>
+    <span class="sparkle-gold">✨</span>
+  </button>
+</div>
+
+<!-- ==========================================================================
+     3. CHAT APPLICATION SHELL (Conversational Interface)
+     ========================================================================== -->
+<div id="appShell" class="hidden">
+  <!-- Mobile Sidebar Backdrop Overlay -->
+  <div id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" aria-label="Chat navigation">
+    <div class="sidebar-header">
+      <div class="sidebar-brand-link" id="sidebarBrandLink" title="Return to Home">
+        <img src="bis_emblem.png" alt="BIS Sahayak" class="sidebar-logo-img" />
+        <span class="sidebar-brand-name">BIS Sahayak</span>
+        <span class="sidebar-brand-badge">AI</span>
+      </div>
+    </div>
+
+    <!-- Return to Home button in sidebar -->
+    <button class="sidebar-home-link" id="sidebarReturnHomeBtn" title="Return to Home page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>&larr; Return to Home</span>
+    </button>
+
+    <button class="btn-new-chat" id="newChatBtn" aria-label="Start a new chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      <span>New chat</span>
+    </button>
+
+    <div class="sidebar-search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="searchInput" type="text" placeholder="Search chats" aria-label="Search previous chats" />
+      <button class="clear-search-btn" id="clearSearchBtn" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="sidebar-label">Recent chats</div>
+    <div class="chat-list" id="chatList" role="list"></div>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <button class="sidebar-foot-btn" id="settingsBtn" aria-label="Open settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+        <span>Settings</span>
+      </button>
+
+      <div class="profile-menu-container">
+        <button class="profile-btn" id="profileBtn" aria-label="Open profile menu" aria-haspopup="true">
+          <span class="avatar-chip" id="userAvatarChip">--</span>
+          <div class="profile-info">
+            <div class="profile-name" id="userNameLabel">User Name</div>
+            <div class="profile-role">BIS Portal User</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted);"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+        <!-- Profile Popover Dropdown -->
+        <div class="popover-menu hidden" id="profilePopover" style="bottom: 48px; left: 0; right: 0;">
+          <button class="popover-item" id="menuProfileDetailsBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Profile Details</span>
+          </button>
+          <button class="popover-item danger" id="menuLogoutBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            <span>Log out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main-area">
+    <!-- Top Mobile Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn" id="hamburgerBtn" aria-label="Open sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <img src="bis_emblem.png" alt="BIS Logo" class="topbar-logo-img" id="topbarBrandImg" style="cursor:pointer;" />
+        <span class="topbar-title" id="topbarTitle">BIS Sahayak</span>
+      </div>
+      <button class="icon-btn" id="topbarNewChatBtn" aria-label="New chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </header>
+
+    <!-- 1. Welcome Screen (Empty / Initial View in Chat) -->
+    <section class="welcome-view" id="welcomeView">
+      <div class="welcome-content">
+        <div class="welcome-logo-container">
+          <img src="bis_logo.png" alt="BIS Sahayak — Your AI Assistant for Indian Standards" class="welcome-logo-img" />
+        </div>
+
+        <h2 class="welcome-title">How can I help you today?</h2>
+        <p class="welcome-subtitle">Ask questions about Indian Standards, BIS certification, hallmarking and more.</p>
+
+        <!-- Welcome Composer -->
+        <div class="composer-wrapper">
+          <form class="composer" id="welcomeComposerForm">
+            <textarea id="welcomeInput" rows="1" placeholder="Ask anything about BIS…" aria-label="Message to BIS Sahayak"></textarea>
+            <button type="submit" class="btn-send" id="welcomeSendBtn" aria-label="Send message" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- 3 Specific Suggestion Buttons -->
+        <div class="suggestions-group">
+          <button class="suggestion-chip" data-query="How do I find the relevant Indian Standard for a product I manufacture?">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <span>Find a Standard</span>
+          </button>
+          <button class="suggestion-chip" data-query="What is the step-by-step process for getting BIS product certification?">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+            <span>BIS Certification</span>
+          </button>
+          <button class="suggestion-chip" data-query="How does BIS hallmarking work for gold jewellery and what is HUID?">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 .9-4.5 4.3L18 20l-6-3.5L6 20l1.5-6.8L3 8.9 9 8z"/></svg>
+            <span>Ask about Hallmarking</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Active Chat View -->
+    <section class="chat-view hidden" id="chatView">
+      <div class="chat-messages-scroll" id="chatMessagesScroll">
+        <div class="chat-messages-container" id="messagesContainer"></div>
+      </div>
+
+      <div class="chat-bottom-bar">
+        <form class="composer" id="chatComposerForm">
+          <textarea id="chatInput" rows="1" placeholder="Ask a follow-up question…" aria-label="Follow-up question"></textarea>
+          <button type="submit" class="btn-send" id="chatSendBtn" aria-label="Send message" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </form>
+        <p class="chat-disclaimer">BIS Sahayak is an AI assistant. Always verify critical conformity details with the official Indian Standards.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     4. MODALS & MENUS
+     ========================================================================== -->
+
+<!-- Chat Item Three-Dot Action Popover -->
+<div class="popover-menu hidden" id="chatActionPopover">
+  <button class="popover-item" id="popoverRenameBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    <span>Rename</span>
+  </button>
+  <button class="popover-item danger" id="popoverDeleteBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+    <span>Delete</span>
+  </button>
+</div>
+
+<!-- Rename Modal -->
+<div class="modal-backdrop" id="renameModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="renameModalTitle">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title" id="renameModalTitle">Rename Chat</h3>
+      <button class="modal-close-btn" data-close="renameModalBackdrop" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="renameInput">Conversation Title</label>
+        <div class="input-wrapper">
+          <input type="text" id="renameInput" maxlength="60" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-modal-cancel" data-close="renameModalBackdrop">Cancel</button>
+      <button type="button" class="btn-modal-confirm" id="confirmRenameBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-backdrop" id="deleteModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title" id="deleteModalTitle">Delete Conversation</h3>
+      <button class="modal-close-btn" data-close="deleteModalBackdrop" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete <strong id="deleteChatTitleSpan">this chat</strong>? This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-modal-cancel" data-close="deleteModalBackdrop">Cancel</button>
+      <button type="button" class="btn-modal-confirm danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Source / Reference Details Modal -->
+<div class="modal-backdrop" id="sourceModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="sourceModalTitle">
+  <div class="modal-card" style="max-width: 520px;">
+    <div class="modal-header">
+      <h3 class="modal-title" id="sourceModalTitle">Standard Specification Reference</h3>
+      <button class="modal-close-btn" data-close="sourceModalBackdrop" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="padding: 12px; background: var(--grad-purple-subtle); border-radius: var(--radius-md); border-left: 4px solid #7C3AED;">
+          <div style="font-size: 11px; font-weight: 700; color: #6D28D9; text-transform: uppercase;">Standard Code</div>
+          <div style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-top: 2px;" id="modalSourceCode">IS 1786:2008</div>
+          <div style="font-size: 13.5px; color: var(--text-secondary); margin-top: 4px;" id="modalSourceName">High Strength Deformed Steel Bars</div>
+        </div>
+
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Relevant Clause / Reference</div>
+          <div style="font-size: 14px; font-weight: 600; color: var(--text-main); margin-top: 2px;" id="modalSourceClause">Clause 1 – Scope & General Requirements</div>
+        </div>
+
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Portal Citation</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Bureau of Indian Standards &bull; Manak Bhavan, New Delhi</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-modal-cancel" data-close="sourceModalBackdrop">Close</button>
+      <button type="button" class="btn-modal-confirm" id="copyCitationBtn">
+        <span>Copy Citation</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-backdrop" id="settingsModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title" id="settingsModalTitle">Settings</h3>
+      <button class="modal-close-btn" data-close="settingsModalBackdrop" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Language</div>
+          <div class="setting-desc">Preferred query & response language</div>
+        </div>
+        <span class="setting-badge">English (EN)</span>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Appearance</div>
+          <div class="setting-desc">Clean Light Theme (SIH 2026 Edition)</div>
+        </div>
+        <span class="setting-badge">Light Theme</span>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Account</div>
+          <div class="setting-desc" id="settingsUserEmailDesc">user@example.com</div>
+        </div>
+        <button type="button" class="btn-msg-action" id="settingsLogoutActionBtn" style="color: var(--danger);">Log out</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-modal-confirm" data-close="settingsModalBackdrop">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Details Modal -->
+<div class="modal-backdrop" id="profileModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title" id="profileModalTitle">User Profile</h3>
+      <button class="modal-close-btn" data-close="profileModalBackdrop" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+        <div class="avatar-chip" id="profileModalAvatar" style="width:46px; height:46px; font-size:16px;">--</div>
+        <div>
+          <div style="font-size:16px; font-weight:700; color:var(--text-main);" id="profileModalName">User Name</div>
+          <div style="font-size:13px; color:var(--text-secondary);" id="profileModalEmail">user@example.com</div>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Organization / Role</div>
+          <div class="setting-desc">Citizen & Standardization Researcher</div>
+        </div>
+        <span class="setting-badge">Active</span>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Session Type</div>
+          <div class="setting-desc">Local Verified Session</div>
+        </div>
+        <span class="setting-badge">Standard</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-modal-cancel" data-close="profileModalBackdrop">Close</button>
+      <button type="button" class="btn-modal-confirm danger" id="profileModalLogoutBtn">Log out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     5. JAVASCRIPT CONTROLLER & STATE
+     ========================================================================== -->
+<script>
+(function() {
+  "use strict";
+
+  /* ==========================================================================
+     1. AUTHENTICATION & USER STATE MANAGEMENT (Local Session)
+     ========================================================================== */
+  var AuthManager = {
+    STORAGE_KEY: "bis_sahayak_auth_user",
+    
+    getCurrentUser: function() {
+      try {
+        var raw = localStorage.getItem(this.STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch(e) {
+        return null;
+      }
+    },
+
+    saveUser: function(user) {
+      try {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+      } catch(e) {}
+    },
+
+    login: function(identifier, password) {
+      return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          var cleanId = identifier.trim();
+          var cleanPwd = password.trim();
+
+          if (!cleanId || !cleanPwd) {
+            return reject(new Error("Please enter both email/username and password."));
+          }
+          if (cleanPwd.length < 4) {
+            return reject(new Error("Password must be at least 4 characters long."));
+          }
+
+          var name = cleanId.indexOf("@") !== -1 ? cleanId.split("@")[0] : cleanId;
+          name = name.charAt(0).toUpperCase() + name.slice(1);
+
+          var user = {
+            id: "u_" + Date.now(),
+            name: name,
+            email: cleanId.indexOf("@") !== -1 ? cleanId : cleanId + "@bis.gov.in",
+            loggedInAt: new Date().toISOString()
+          };
+
+          AuthManager.saveUser(user);
+          resolve(user);
+        }, 350);
+      });
+    },
+
+    signup: function(name, email, password, confirmPassword) {
+      return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          var cleanName = name.trim();
+          var cleanEmail = email.trim().toLowerCase();
+          var cleanPwd = password.trim();
+          var cleanConfirm = confirmPassword.trim();
+
+          if (!cleanName || !cleanEmail || !cleanPwd || !cleanConfirm) {
+            return reject(new Error("All fields are required."));
+          }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+            return reject(new Error("Please provide a valid email address."));
+          }
+          if (cleanPwd.length < 6) {
+            return reject(new Error("Password must be at least 6 characters long."));
+          }
+          if (cleanPwd !== cleanConfirm) {
+            return reject(new Error("Passwords do not match. Please re-enter."));
+          }
+
+          var user = {
+            id: "u_" + Date.now(),
+            name: cleanName,
+            email: cleanEmail,
+            loggedInAt: new Date().toISOString()
+          };
+
+          AuthManager.saveUser(user);
+          resolve(user);
+        }, 400);
+      });
+    },
+
+    logout: function() {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
+  };
+
+  /* ==========================================================================
+     2. CHAT DATA & BACKEND-READY SERVICE LAYER
+     ========================================================================== */
+  var seedConversations = [
+    {
+      id: "chat-1",
+      title: "IS 1786 rebar specifications",
+      createdAt: Date.now() - 3600000 * 2,
+      messages: [
+        { role: "user", text: "What are the specifications and grades under IS 1786?" },
+        {
+          role: "ai",
+          text: "### Applicable Standard: IS 1786:2008\n**IS 1786:2008** specifies requirements for high strength deformed steel bars and wires for concrete reinforcement.\n\n### Key Grades Covered:\n• **Fe 415 & Fe 415D** — Standard ductile rebar for general RCC\n• **Fe 500 & Fe 500D** — Widely used in seismic and infrastructure construction\n• **Fe 550 & Fe 550D** — High tensile applications\n• **Fe 600** — Ultra-high strength rebar\n\n<table class=\"standards-table\"><thead><tr><th>Grade</th><th>Min 0.2% Proof Stress (N/mm²)</th><th>Min Tensile Strength (N/mm²)</th><th>Min Elongation (%)</th></tr></thead><tbody><tr><td><strong>Fe 415</strong></td><td>415</td><td>485</td><td>14.5%</td></tr><tr><td><strong>Fe 500</strong></td><td>500</td><td>545</td><td>12.0%</td></tr><tr><td><strong>Fe 500D</strong></td><td>500</td><td>565</td><td>16.0%</td></tr><tr><td><strong>Fe 550D</strong></td><td>550</td><td>600</td><td>14.5%</td></tr></tbody></table>\n\n<div class=\"highlight-box\"><strong>Mandatory Compliance Note:</strong> Fe 'D' series denotes enhanced ductility suitable for seismic zones (Clause 8.1).</div>",
+          sources: [
+            { code: "IS 1786:2008", name: "High Strength Deformed Steel Bars for Concrete Reinforcement", clause: "Clause 1 (Scope) & Clause 8 (Mechanical Properties)" },
+            { code: "BIS Product Manual", name: "Scheme of Inspection and Testing for Reinforcing Steel", clause: "Section 4.2 – Quality Certification" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "chat-2",
+      title: "BIS CRS certification for electronics",
+      createdAt: Date.now() - 3600000 * 24,
+      messages: [
+        { role: "user", text: "What is the process for getting BIS certification for electronics under CRS?" },
+        {
+          role: "ai",
+          text: "### Compulsory Registration Scheme (CRS) Process\nElectronics and IT goods notified under CRS by MeitY are governed under the **BIS (Conformity Assessment) Regulations, 2018 (Scheme-II)**.\n\n### Step-by-Step Registration Workflow:\n1. **Identify Product Standard** — Match the product HS code and category against the notified CRO order list.\n2. **Lab Sample Testing** — Submit production samples to a BIS-recognized laboratory in India for safety testing.\n3. **Test Report Generation** — Obtain a compliant test report (valid for 90 days for online submission).\n4. **Portal Registration** — Create a manufacturer account on the BIS CRS portal and submit factory and test details.\n5. **Grant of Registration** — BIS reviews documentation and issues a unique Registration Number (R-Number) to apply the Standard Mark.\n\n<div class=\"highlight-box\"><strong>Lab Test Validity:</strong> Test reports submitted to BIS must not be older than 90 days from the date of issue (Regulation 4).</div>",
+          sources: [
+            { code: "BIS Conformity Assessment", name: "Compulsory Registration Scheme (CRS) Guidelines", clause: "Scheme-II, Regulation 4 – Grant of Registration" },
+            { code: "IS 13252 (Part 1)", name: "Information Technology Equipment – Safety", clause: "General Safety Requirements" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "chat-3",
+      title: "Hallmarking purity codes & HUID",
+      createdAt: Date.now() - 3600000 * 48,
+      messages: [
+        { role: "user", text: "How does gold hallmarking work and what does HUID mean?" },
+        {
+          role: "ai",
+          text: "### BIS Gold Jewellery Hallmarking System\nHallmarking of gold jewellery in India is governed under **IS 1417:2016**. A genuine hallmark consists of three distinct marks:\n\n1. **BIS Standard Mark** — The official BIS triangle logo\n2. **Purity in Karat and Fineness** — Purity designation:\n   • **24K999** (99.9% pure gold)\n   • **22K916** (91.6% pure gold — standard for jewellery)\n   • **18K750** (75.0% pure gold)\n   • **14K585** (58.5% pure gold)\n3. **HUID (Hallmark Unique Identification)** — A 6-digit alphanumeric code laser-engraved on each individual piece.\n\n<div class=\"highlight-box\"><strong>HUID Verification:</strong> Consumers can verify the authenticity, assaying centre, and purity using the official <em>BIS CARE Mobile App</em> by entering the 6-digit HUID.</div>",
+          sources: [
+            { code: "IS 1417:2016", name: "Gold and Gold Alloys, Jewellery/Artefacts – Fineness and Marking", clause: "Clause 4 (Fineness) & Clause 6 (Marking System)" },
+            { code: "BIS Hallmarking Scheme", name: "Hallmarking Regulations & HUID Guidelines", clause: "Standard Mark Guidelines 2021" }
+          ]
+        }
+      ]
+    }
+  ];
+
+  /* Knowledge Base for Clean Deterministic Offline / Mock AI Responses */
+  var KnowledgeBase = {
+    findResponse: function(query) {
+      var q = query.toLowerCase();
+
+      if (q.indexOf("hallmark") !== -1 || q.indexOf("gold") !== -1 || q.indexOf("huid") !== -1 || q.indexOf("jewel") !== -1) {
+        return {
+          text: "### Gold Jewellery Hallmarking & Purity Standards\nHallmarking is mandatory for gold jewellery sold in India under **IS 1417:2016**.\n\n### Official Fineness Grades:\n• **24K (999)** — Pure Gold / Bullion\n• **22K (916)** — 91.6% Pure Gold (most common for bridal jewellery)\n• **18K (750)** — 75.0% Pure Gold (diamond & studded jewellery)\n• **14K (585)** — 58.5% Pure Gold\n\n### The 3 Hallmarking Elements:\n1. **BIS Mark** (Triangle symbol)\n2. **Karat and Fineness** (e.g. 22K916)\n3. **6-Digit HUID** (Hallmark Unique Identification)\n\n<div class=\"highlight-box\"><strong>HUID Traceability:</strong> Each hallmarked article receives a unique laser-engraved 6-digit alphanumeric code assigned by a BIS-certified Assaying and Hallmarking Centre (AHC).</div>",
+          sources: [
+            { code: "IS 1417:2016", name: "Gold and Gold Alloys Jewellery – Fineness and Marking", clause: "Clause 4 (Purity Classes) & Clause 6 (HUID System)" },
+            { code: "BIS Hallmarking Regulations", name: "Guidelines for Assaying and Hallmarking Centres", clause: "Section 3 – Consumer Verification" }
+          ]
+        };
+      }
+
+      if (q.indexOf("certif") !== -1 || q.indexOf("licen") !== -1 || q.indexOf("isi mark") !== -1 || q.indexOf("process") !== -1 || q.indexOf("apply") !== -1) {
+        return {
+          text: "### BIS Product Certification (ISI Mark Scheme-I)\nProduct certification under **Scheme-I of the BIS (Conformity Assessment) Regulations, 2018** grants manufacturers a licence to use the prestigious **ISI Standard Mark**.\n\n### 4-Stage Certification Workflow:\n1. **Application Submission** — File an online application on the *Manakonline* portal with product details, factory manufacturing machinery, and in-house testing equipment.\n2. **Factory Audit & Sample Drawing** — A BIS certification officer inspects the manufacturing premises, checks quality control, and draws representative samples.\n3. **Independent Lab Testing** — Samples are tested in BIS Laboratories or BIS-recognized independent testing facilities.\n4. **Grant of Licence (CML)** — Upon successful testing and verification of compliance, a Certificate of Manufacturing Licence is issued.\n\n<div class=\"highlight-box\"><strong>Simplified Procedure:</strong> For MSMEs and standard products, a simplified option permits grant of licence within 30 days based on prior lab testing reports.</div>",
+          sources: [
+            { code: "Conformity Assessment Regulations", name: "BIS (Conformity Assessment) Regulations, 2018", clause: "Scheme-I, Regulation 3 & 4 (Grant of Product Licence)" },
+            { code: "BIS Product Manual", name: "General Guidelines for Factory Inspection and Testing", clause: "Clause 5 – Quality Surveillance" }
+          ]
+        };
+      }
+
+      if (q.indexOf("water") !== -1 || q.indexOf("is 10500") !== -1 || q.indexOf("drink") !== -1) {
+        return {
+          text: "### Applicable Standard: IS 10500:2012 (Drinking Water Specification)\n**IS 10500:2012** prescribes quality requirements, test methods, and permissible limits for drinking water in India.\n\n### Essential Parameter Limits:\n<table class=\"standards-table\"><thead><tr><th>Parameter</th><th>Requirement (Acceptable Limit)</th><th>Permissible Limit (in absence of alternate source)</th></tr></thead><tbody><tr><td><strong>pH Value</strong></td><td>6.5 – 8.5</td><td>No relaxation</td></tr><tr><td><strong>Total Dissolved Solids (TDS)</strong></td><td>500 mg/l</td><td>2000 mg/l</td></tr><tr><td><strong>Total Hardness (as CaCO₃)</strong></td><td>200 mg/l</td><td>600 mg/l</td></tr><tr><td><strong>Turbidity</strong></td><td>1 NTU</td><td>5 NTU</td></tr><tr><td><strong>Chlorides (as Cl)</strong></td><td>250 mg/l</td><td>1000 mg/l</td></tr></tbody></table>\n\n<div class=\"highlight-box\"><strong>Bacteriological Requirement:</strong> E. coli or thermotolerant coliform bacteria must NOT be detectable in any 100 ml sample (Clause 4.1).</div>",
+          sources: [
+            { code: "IS 10500:2012", name: "Drinking Water Specification (Second Revision)", clause: "Table 1 (Organoleptic Limits) & Table 2 (General Parameters)" },
+            { code: "IS 14543:2016", name: "Packaged Drinking Water (Other than Natural Mineral Water)", clause: "Clause 4 – Hygiene and Safety Standards" }
+          ]
+        };
+      }
+
+      if (q.indexOf("steel") !== -1 || q.indexOf("rebar") !== -1 || q.indexOf("is 1786") !== -1) {
+        return {
+          text: "### Applicable Standard: IS 1786:2008 (Reinforcement Steel)\n**IS 1786:2008** specifies requirements for high-strength deformed steel bars and wires used in concrete reinforcement.\n\n### Standard Mechanical Limits:\n• **Fe 415:** Yield stress $f_y \\ge 415\\text{ N/mm}^2$, elongation $\\ge 14.5\\%$\n• **Fe 500:** Yield stress $f_y \\ge 500\\text{ N/mm}^2$, elongation $\\ge 12.0\\%$\n• **Fe 500D:** Enhanced ductility grade with minimum elongation of $16.0\\%$ and $R_m/R_e \\ge 1.10$\n• **Fe 550D:** High strength grade with elongation of $14.5\\%$\n\n<div class=\"highlight-box\"><strong>Quality Control Order (QCO):</strong> Steel bars for reinforcement are under mandatory BIS certification; uncertified manufacturing or sale is strictly prohibited by law.</div>",
+          sources: [
+            { code: "IS 1786:2008", name: "High Strength Deformed Steel Bars for Concrete Reinforcement", clause: "Clause 8.1 (Tensile & Proof Stress Requirements)" },
+            { code: "Steel Quality Control Order", name: "Ministry of Steel Mandatory Quality Control Guidelines", clause: "Section 2 – Quality Enforcement" }
+          ]
+        };
+      }
+
+      return {
+        text: "### Indian Standards Overview\nThe **Bureau of Indian Standards (BIS)** is the National Standards Body of India responsible for the harmonious development of standardization, marking, and quality certification.\n\n### Key BIS Programs & Standards:\n• **Indian Standards (IS Codes):** Over 21,000 national standards spanning civil engineering, electronics, chemicals, mechanical, food, and textiles.\n• **Product Certification (ISI Mark):** Verification scheme ensuring consumer safety and conformity.\n• **Compulsory Registration Scheme (CRS):** Mandatory compliance for IT and electronics goods.\n• **Hallmarking:** Legal certification of gold and silver purity with 6-digit HUID traceability.\n\n<div class=\"highlight-box\">You can search specific IS standard numbers (e.g. <em>IS 10500</em>, <em>IS 1786</em>, <em>IS 1417</em>) or ask about certification requirements for any product category.</div>",
+        sources: [
+          { code: "BIS Standards Portal", name: "Bureau of Indian Standards Repository (standards.bis.gov.in)", clause: "Search by Product / Indian Standard Number" },
+          { code: "BIS Act, 2016", name: "Bureau of Indian Standards Act and Conformity Regulations", clause: "Section 10 – Standardization Mandate" }
+        ]
+      };
+    }
+  };
+
+  /* ==========================================================================
+     3. CHAT STATE & MANAGEMENT
+     ========================================================================== */
+  var ChatManager = {
+    STORAGE_KEY: "bis_sahayak_chats",
+
+    getChats: function() {
+      try {
+        var raw = localStorage.getItem(this.STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch(e) {}
+      return seedConversations.slice();
+    },
+
+    saveChats: function(chats) {
+      try {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(chats));
+      } catch(e) {}
+    },
+
+    getChatById: function(id) {
+      var chats = this.getChats();
+      for (var i = 0; i < chats.length; i++) {
+        if (chats[i].id === id) return chats[i];
+      }
+      return null;
+    },
+
+    createChat: function(initialTitle, firstMessageText) {
+      var chats = this.getChats();
+      var id = "chat-" + Date.now();
+      var title = initialTitle.length > 38 ? initialTitle.slice(0, 38) + "…" : initialTitle;
+      
+      var newChat = {
+        id: id,
+        title: title,
+        createdAt: Date.now(),
+        messages: []
+      };
+
+      chats.unshift(newChat);
+      this.saveChats(chats);
+      return newChat;
+    },
+
+    renameChat: function(id, newTitle) {
+      var chats = this.getChats();
+      for (var i = 0; i < chats.length; i++) {
+        if (chats[i].id === id) {
+          chats[i].title = newTitle.trim();
+          break;
+        }
+      }
+      this.saveChats(chats);
+    },
+
+    deleteChat: function(id) {
+      var chats = this.getChats();
+      chats = chats.filter(function(c) { return c.id !== id; });
+      this.saveChats(chats);
+    },
+
+    addMessage: function(chatId, role, text, sources) {
+      var chats = this.getChats();
+      var targetChat = null;
+      for (var i = 0; i < chats.length; i++) {
+        if (chats[i].id === chatId) {
+          targetChat = chats[i];
+          break;
+        }
+      }
+      if (!targetChat) return null;
+
+      var msg = { role: role, text: text, sources: sources || null, timestamp: Date.now() };
+      targetChat.messages.push(msg);
+      this.saveChats(chats);
+      return msg;
+    }
+  };
+
+  /* ==========================================================================
+     4. APPLICATION UI CONTROLLER
+     ========================================================================== */
+  var UI = {
+    state: {
+      currentUser: null,
+      currentView: "home",
+      activeChatId: null,
+      activeActionChatId: null,
+      pendingDeleteChatId: null,
+      pendingRenameChatId: null,
+      isGenerating: false,
+      searchQuery: ""
+    },
+
+    elements: {},
+
+    init: function() {
+      this.bindElements();
+      this.bindEvents();
+      this.checkSession();
+    },
+
+    bindElements: function() {
+      var el = this.elements;
+      // Auth elements
+      el.authScreen = document.getElementById("authScreen");
+      el.tabLoginBtn = document.getElementById("tabLoginBtn");
+      el.tabSignupBtn = document.getElementById("tabSignupBtn");
+      el.authAlert = document.getElementById("authAlert");
+      el.loginForm = document.getElementById("loginForm");
+      el.loginIdentifier = document.getElementById("loginIdentifier");
+      el.loginPassword = document.getElementById("loginPassword");
+      el.loginSubmitBtn = document.getElementById("loginSubmitBtn");
+      el.signupForm = document.getElementById("signupForm");
+      el.signupName = document.getElementById("signupName");
+      el.signupEmail = document.getElementById("signupEmail");
+      el.signupPassword = document.getElementById("signupPassword");
+      el.signupConfirmPassword = document.getElementById("signupConfirmPassword");
+      el.signupSubmitBtn = document.getElementById("signupSubmitBtn");
+      el.authToggleHint = document.getElementById("authToggleHint");
+      el.authToggleLink = document.getElementById("authToggleLink");
+
+      // Home Screen elements
+      el.homeScreen = document.getElementById("homeScreen");
+      el.homeMenuBtn = document.getElementById("homeMenuBtn");
+      el.homeBrandLink = document.getElementById("homeBrandLink");
+      el.homeMenuDrawer = document.getElementById("homeMenuDrawer");
+      el.homeDrawerOverlay = document.getElementById("homeDrawerOverlay");
+      el.closeDrawerBtn = document.getElementById("closeDrawerBtn");
+      el.drawerAvatarChip = document.getElementById("drawerAvatarChip");
+      el.drawerUserName = document.getElementById("drawerUserName");
+      el.drawerHomeBtn = document.getElementById("drawerHomeBtn");
+      el.drawerStartChatBtn = document.getElementById("drawerStartChatBtn");
+      el.drawerAboutBtn = document.getElementById("drawerAboutBtn");
+      el.drawerHowItWorksBtn = document.getElementById("drawerHowItWorksBtn");
+      el.drawerSettingsBtn = document.getElementById("drawerSettingsBtn");
+      el.drawerProfileBtn = document.getElementById("drawerProfileBtn");
+      el.drawerLogoutBtn = document.getElementById("drawerLogoutBtn");
+      el.heroStartChatBtn = document.getElementById("heroStartChatBtn");
+      el.floatingChatBtn = document.getElementById("floatingChatBtn");
+
+      // App Shell (Chat View) elements
+      el.appShell = document.getElementById("appShell");
+      el.sidebar = document.getElementById("sidebar");
+      el.sidebarOverlay = document.getElementById("sidebarOverlay");
+      el.sidebarBrandLink = document.getElementById("sidebarBrandLink");
+      el.sidebarReturnHomeBtn = document.getElementById("sidebarReturnHomeBtn");
+      el.hamburgerBtn = document.getElementById("hamburgerBtn");
+      el.topbarBrandImg = document.getElementById("topbarBrandImg");
+      el.newChatBtn = document.getElementById("newChatBtn");
+      el.topbarNewChatBtn = document.getElementById("topbarNewChatBtn");
+      el.searchInput = document.getElementById("searchInput");
+      el.clearSearchBtn = document.getElementById("clearSearchBtn");
+      el.chatList = document.getElementById("chatList");
+      el.settingsBtn = document.getElementById("settingsBtn");
+      el.profileBtn = document.getElementById("profileBtn");
+      el.userAvatarChip = document.getElementById("userAvatarChip");
+      el.userNameLabel = document.getElementById("userNameLabel");
+      el.topbarTitle = document.getElementById("topbarTitle");
+
+      // Popovers & Modals
+      el.profilePopover = document.getElementById("profilePopover");
+      el.menuProfileDetailsBtn = document.getElementById("menuProfileDetailsBtn");
+      el.menuLogoutBtn = document.getElementById("menuLogoutBtn");
+      el.chatActionPopover = document.getElementById("chatActionPopover");
+      el.popoverRenameBtn = document.getElementById("popoverRenameBtn");
+      el.popoverDeleteBtn = document.getElementById("popoverDeleteBtn");
+
+      // Chat Views & Composers
+      el.welcomeView = document.getElementById("welcomeView");
+      el.welcomeComposerForm = document.getElementById("welcomeComposerForm");
+      el.welcomeInput = document.getElementById("welcomeInput");
+      el.welcomeSendBtn = document.getElementById("welcomeSendBtn");
+      el.chatView = document.getElementById("chatView");
+      el.chatMessagesScroll = document.getElementById("chatMessagesScroll");
+      el.messagesContainer = document.getElementById("messagesContainer");
+      el.chatComposerForm = document.getElementById("chatComposerForm");
+      el.chatInput = document.getElementById("chatInput");
+      el.chatSendBtn = document.getElementById("chatSendBtn");
+
+      // Modals Backdrops
+      el.renameModalBackdrop = document.getElementById("renameModalBackdrop");
+      el.renameInput = document.getElementById("renameInput");
+      el.confirmRenameBtn = document.getElementById("confirmRenameBtn");
+      el.deleteModalBackdrop = document.getElementById("deleteModalBackdrop");
+      el.deleteChatTitleSpan = document.getElementById("deleteChatTitleSpan");
+      el.confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+      el.sourceModalBackdrop = document.getElementById("sourceModalBackdrop");
+      el.modalSourceCode = document.getElementById("modalSourceCode");
+      el.modalSourceName = document.getElementById("modalSourceName");
+      el.modalSourceClause = document.getElementById("modalSourceClause");
+      el.copyCitationBtn = document.getElementById("copyCitationBtn");
+      el.settingsModalBackdrop = document.getElementById("settingsModalBackdrop");
+      el.settingsUserEmailDesc = document.getElementById("settingsUserEmailDesc");
+      el.settingsLogoutActionBtn = document.getElementById("settingsLogoutActionBtn");
+      el.profileModalBackdrop = document.getElementById("profileModalBackdrop");
+      el.profileModalAvatar = document.getElementById("profileModalAvatar");
+      el.profileModalName = document.getElementById("profileModalName");
+      el.profileModalEmail = document.getElementById("profileModalEmail");
+      el.profileModalLogoutBtn = document.getElementById("profileModalLogoutBtn");
+    },
+
+    bindEvents: function() {
+      var self = this;
+      var el = this.elements;
+
+      // Auth tab switches
+      el.tabLoginBtn.addEventListener("click", function() { self.switchAuthTab("login"); });
+      el.tabSignupBtn.addEventListener("click", function() { self.switchAuthTab("signup"); });
+      el.authToggleLink.addEventListener("click", function(e) {
+        e.preventDefault();
+        var isLogin = !el.loginForm.classList.contains("hidden");
+        self.switchAuthTab(isLogin ? "signup" : "login");
+      });
+
+      // Password visibility toggles
+      document.querySelectorAll(".toggle-pwd-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var targetId = btn.getAttribute("data-target");
+          var input = document.getElementById(targetId);
+          if (input) {
+            var isPwd = input.type === "password";
+            input.type = isPwd ? "text" : "password";
+            btn.style.color = isPwd ? "#7C3AED" : "var(--text-muted)";
+          }
+        });
+      });
+
+      // Login submission
+      el.loginForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        self.handleLogin();
+      });
+
+      // Signup submission
+      el.signupForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        self.handleSignup();
+      });
+
+      // Home Drawer Toggle
+      el.homeMenuBtn.addEventListener("click", function() { self.toggleHomeDrawer(true); });
+      el.closeDrawerBtn.addEventListener("click", function() { self.toggleHomeDrawer(false); });
+      el.homeDrawerOverlay.addEventListener("click", function() { self.toggleHomeDrawer(false); });
+
+      // Home Navigation items
+      el.homeBrandLink.addEventListener("click", function() { self.navigateToHome(); });
+      el.drawerHomeBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.navigateToHome();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      el.drawerAboutBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.navigateToHome();
+        var ab = document.getElementById("aboutSection");
+        if (ab) ab.scrollIntoView({ behavior: 'smooth' });
+      });
+      el.drawerHowItWorksBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.navigateToHome();
+        var hw = document.getElementById("howItWorksSection");
+        if (hw) hw.scrollIntoView({ behavior: 'smooth' });
+      });
+      el.drawerSettingsBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.openSettingsModal();
+      });
+      el.drawerProfileBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.openProfileModal();
+      });
+      el.drawerLogoutBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.handleLogout();
+      });
+
+      // Start New Chat triggers from Home & Drawer
+      el.drawerStartChatBtn.addEventListener("click", function() {
+        self.toggleHomeDrawer(false);
+        self.startNewChat();
+      });
+      el.heroStartChatBtn.addEventListener("click", function() {
+        self.startNewChat();
+      });
+      el.floatingChatBtn.addEventListener("click", function() {
+        self.startNewChat();
+      });
+
+      // Chat Sidebar & Return to Home
+      el.sidebarBrandLink.addEventListener("click", function() { self.navigateToHome(); });
+      el.sidebarReturnHomeBtn.addEventListener("click", function() { self.navigateToHome(); });
+      el.topbarBrandImg.addEventListener("click", function() { self.navigateToHome(); });
+
+      // Chat view sidebar triggers
+      el.hamburgerBtn.addEventListener("click", function() { self.toggleChatSidebar(true); });
+      el.sidebarOverlay.addEventListener("click", function() { self.toggleChatSidebar(false); });
+      el.newChatBtn.addEventListener("click", function() { self.startNewChat(); });
+      el.topbarNewChatBtn.addEventListener("click", function() { self.startNewChat(); });
+
+      // Search input in Chat Sidebar
+      el.searchInput.addEventListener("input", function() {
+        self.state.searchQuery = el.searchInput.value.trim().toLowerCase();
+        el.clearSearchBtn.classList.toggle("show", self.state.searchQuery.length > 0);
+        self.renderChatList();
+      });
+      el.clearSearchBtn.addEventListener("click", function() {
+        el.searchInput.value = "";
+        self.state.searchQuery = "";
+        el.clearSearchBtn.classList.remove("show");
+        self.renderChatList();
+        el.searchInput.focus();
+      });
+
+      // Profile menu popover in Chat Sidebar
+      el.profileBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        var isHidden = el.profilePopover.classList.contains("hidden");
+        self.closeAllPopovers();
+        if (isHidden) el.profilePopover.classList.remove("hidden");
+      });
+
+      el.menuProfileDetailsBtn.addEventListener("click", function() {
+        self.closeAllPopovers();
+        self.openProfileModal();
+      });
+      el.menuLogoutBtn.addEventListener("click", function() {
+        self.closeAllPopovers();
+        self.handleLogout();
+      });
+      el.settingsLogoutActionBtn.addEventListener("click", function() {
+        self.closeModal("settingsModalBackdrop");
+        self.handleLogout();
+      });
+      el.profileModalLogoutBtn.addEventListener("click", function() {
+        self.closeModal("profileModalBackdrop");
+        self.handleLogout();
+      });
+
+      // Settings modal trigger
+      el.settingsBtn.addEventListener("click", function() {
+        self.closeAllPopovers();
+        self.openSettingsModal();
+      });
+
+      // Close popovers on outside click
+      document.addEventListener("click", function(e) {
+        if (!e.target.closest(".profile-menu-container") && !e.target.closest(".chat-item-wrapper")) {
+          self.closeAllPopovers();
+        }
+      });
+
+      // Chat action popover buttons
+      el.popoverRenameBtn.addEventListener("click", function() {
+        var chatId = self.state.activeActionChatId;
+        self.closeAllPopovers();
+        if (chatId) self.openRenameModal(chatId);
+      });
+      el.popoverDeleteBtn.addEventListener("click", function() {
+        var chatId = self.state.activeActionChatId;
+        self.closeAllPopovers();
+        if (chatId) self.openDeleteModal(chatId);
+      });
+
+      // Rename Modal confirm
+      el.confirmRenameBtn.addEventListener("click", function() {
+        var newTitle = el.renameInput.value.trim();
+        if (!newTitle) return;
+        ChatManager.renameChat(self.state.pendingRenameChatId, newTitle);
+        self.closeModal("renameModalBackdrop");
+        self.renderChatList();
+        if (self.state.activeChatId === self.state.pendingRenameChatId) {
+          el.topbarTitle.textContent = newTitle;
+        }
+        self.showToast("Conversation renamed");
+      });
+
+      // Delete Modal confirm
+      el.confirmDeleteBtn.addEventListener("click", function() {
+        var chatId = self.state.pendingDeleteChatId;
+        ChatManager.deleteChat(chatId);
+        self.closeModal("deleteModalBackdrop");
+        self.renderChatList();
+        if (self.state.activeChatId === chatId) {
+          self.startNewChat();
+        }
+        self.showToast("Conversation deleted");
+      });
+
+      // Modal close buttons (data-close)
+      document.querySelectorAll("[data-close]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var targetModalId = btn.getAttribute("data-close");
+          self.closeModal(targetModalId);
+        });
+      });
+
+      // Close modals on Escape
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+          document.querySelectorAll(".modal-backdrop.show").forEach(function(modal) {
+            modal.classList.remove("show");
+          });
+          self.closeAllPopovers();
+          self.toggleHomeDrawer(false);
+          self.toggleChatSidebar(false);
+        }
+      });
+
+      // Auto-resize inputs and button enable
+      [el.welcomeInput, el.chatInput].forEach(function(ta) {
+        var sendBtn = ta === el.welcomeInput ? el.welcomeSendBtn : el.chatSendBtn;
+        ta.addEventListener("input", function() {
+          self.autosizeTextarea(ta);
+          sendBtn.disabled = !ta.value.trim() || self.state.isGenerating;
+        });
+        ta.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            if (!sendBtn.disabled) {
+              ta.form.requestSubmit ? ta.form.requestSubmit() : ta.closest("form").dispatchEvent(new Event("submit", { cancelable: true }));
+            }
+          }
+        });
+      });
+
+      // Suggestion Chips Click in Welcome Screen
+      document.querySelectorAll(".suggestion-chip").forEach(function(chip) {
+        chip.addEventListener("click", function() {
+          var query = chip.getAttribute("data-query");
+          if (query) self.initiateQuestion(query);
+        });
+      });
+
+      // Welcome Form submit
+      el.welcomeComposerForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        var text = el.welcomeInput.value.trim();
+        if (!text || self.state.isGenerating) return;
+        el.welcomeInput.value = "";
+        self.autosizeTextarea(el.welcomeInput);
+        el.welcomeSendBtn.disabled = true;
+        self.initiateQuestion(text);
+      });
+
+      // Chat Form submit
+      el.chatComposerForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        var text = el.chatInput.value.trim();
+        if (!text || self.state.isGenerating) return;
+        el.chatInput.value = "";
+        self.autosizeTextarea(el.chatInput);
+        el.chatSendBtn.disabled = true;
+        self.sendChatMessage(text);
+      });
+
+      // Copy Citation in modal
+      el.copyCitationBtn.addEventListener("click", function() {
+        var code = el.modalSourceCode.textContent;
+        var name = el.modalSourceName.textContent;
+        var clause = el.modalSourceClause.textContent;
+        var citation = code + " (" + name + ") — " + clause + " [Bureau of Indian Standards]";
+        self.copyToClipboard(citation, "Citation copied to clipboard!");
+      });
+    },
+
+    checkSession: function() {
+      var user = AuthManager.getCurrentUser();
+      if (user) {
+        this.setUserSession(user);
+      } else {
+        this.showAuthScreen();
+      }
+    },
+
+    showAuthScreen: function() {
+      this.state.currentView = "auth";
+      this.elements.appShell.classList.add("hidden");
+      this.elements.homeScreen.classList.add("hidden");
+      this.elements.authScreen.classList.remove("hidden");
+      this.switchAuthTab("login");
+    },
+
+    setUserSession: function(user) {
+      this.state.currentUser = user;
+      var initials = this.getInitials(user.name);
+
+      this.elements.userAvatarChip.textContent = initials;
+      this.elements.userNameLabel.textContent = user.name;
+      this.elements.drawerAvatarChip.textContent = initials;
+      this.elements.drawerUserName.textContent = user.name;
+      this.elements.settingsUserEmailDesc.textContent = user.email;
+
+      this.renderChatList();
+      this.navigateToHome();
+    },
+
+    navigateToHome: function() {
+      this.state.currentView = "home";
+      this.elements.authScreen.classList.add("hidden");
+      this.elements.appShell.classList.add("hidden");
+      this.elements.homeScreen.classList.remove("hidden");
+      this.toggleHomeDrawer(false);
+      this.toggleChatSidebar(false);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    },
+
+    navigateToChat: function() {
+      this.state.currentView = "chat";
+      this.elements.authScreen.classList.add("hidden");
+      this.elements.homeScreen.classList.add("hidden");
+      this.elements.appShell.classList.remove("hidden");
+      this.toggleHomeDrawer(false);
+      this.toggleChatSidebar(false);
+    },
+
+    getInitials: function(name) {
+      if (!name) return "US";
+      var parts = name.trim().split(" ");
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    },
+
+    switchAuthTab: function(tab) {
+      var el = this.elements;
+      this.clearAuthAlert();
+      if (tab === "login") {
+        el.tabLoginBtn.classList.add("active");
+        el.tabSignupBtn.classList.remove("active");
+        el.loginForm.classList.remove("hidden");
+        el.signupForm.classList.add("hidden");
+        el.authToggleHint.textContent = "Don't have an account?";
+        el.authToggleLink.textContent = "Sign up";
+      } else {
+        el.tabSignupBtn.classList.add("active");
+        el.tabLoginBtn.classList.remove("active");
+        el.signupForm.classList.remove("hidden");
+        el.loginForm.classList.add("hidden");
+        el.authToggleHint.textContent = "Already have an account?";
+        el.authToggleLink.textContent = "Log in";
+      }
+    },
+
+    showAuthAlert: function(message, isError) {
+      var alert = this.elements.authAlert;
+      alert.textContent = message;
+      alert.className = "form-alert " + (isError ? "error" : "success");
+    },
+
+    clearAuthAlert: function() {
+      this.elements.authAlert.className = "form-alert";
+      this.elements.authAlert.textContent = "";
+    },
+
+    handleLogin: function() {
+      var self = this;
+      var el = this.elements;
+      var id = el.loginIdentifier.value;
+      var pwd = el.loginPassword.value;
+
+      el.loginSubmitBtn.disabled = true;
+      el.loginSubmitBtn.innerHTML = '<span>Logging in...</span>';
+
+      AuthManager.login(id, pwd)
+        .then(function(user) {
+          self.setUserSession(user);
+          self.showToast("Welcome back, " + user.name + "!");
+        })
+        .catch(function(err) {
+          self.showAuthAlert(err.message, true);
+        })
+        .finally(function() {
+          el.loginSubmitBtn.disabled = false;
+          el.loginSubmitBtn.innerHTML = '<span>Log in</span>';
+        });
+    },
+
+    handleSignup: function() {
+      var self = this;
+      var el = this.elements;
+      var name = el.signupName.value;
+      var email = el.signupEmail.value;
+      var pwd = el.signupPassword.value;
+      var confirmPwd = el.signupConfirmPassword.value;
+
+      el.signupSubmitBtn.disabled = true;
+      el.signupSubmitBtn.innerHTML = '<span>Creating Account...</span>';
+
+      AuthManager.signup(name, email, pwd, confirmPwd)
+        .then(function(user) {
+          self.setUserSession(user);
+          self.showToast("Account created successfully!");
+        })
+        .catch(function(err) {
+          self.showAuthAlert(err.message, true);
+        })
+        .finally(function() {
+          el.signupSubmitBtn.disabled = false;
+          el.signupSubmitBtn.innerHTML = '<span>Create Account</span>';
+        });
+    },
+
+    handleLogout: function() {
+      AuthManager.logout();
+      this.state.currentUser = null;
+      this.state.activeChatId = null;
+      this.showToast("Logged out successfully");
+      this.showAuthScreen();
+    },
+
+    toggleHomeDrawer: function(open) {
+      this.elements.homeMenuDrawer.classList.toggle("open", open);
+      this.elements.homeDrawerOverlay.classList.toggle("show", open);
+    },
+
+    toggleChatSidebar: function(open) {
+      this.elements.sidebar.classList.toggle("open", open);
+      this.elements.sidebarOverlay.classList.toggle("show", open);
+    },
+
+    closeAllPopovers: function() {
+      this.elements.profilePopover.classList.add("hidden");
+      this.elements.chatActionPopover.classList.add("hidden");
+      this.state.activeActionChatId = null;
+    },
+
+    autosizeTextarea: function(ta) {
+      ta.style.height = "auto";
+      ta.style.height = Math.min(ta.scrollHeight, 140) + "px";
+    },
+
+    /* ---- Chat Navigation & Rendering ---- */
+    startNewChat: function() {
+      this.state.activeChatId = null;
+      this.renderChatList();
+      this.navigateToChat();
+      this.showWelcomeView();
+      this.toggleChatSidebar(false);
+    },
+
+    showWelcomeView: function() {
+      this.elements.chatView.classList.add("hidden");
+      this.elements.welcomeView.classList.remove("hidden");
+      this.elements.topbarTitle.textContent = "BIS Sahayak";
+      this.elements.welcomeInput.value = "";
+      this.autosizeTextarea(this.elements.welcomeInput);
+      this.elements.welcomeSendBtn.disabled = true;
+      this.elements.welcomeInput.focus();
+    },
+
+    openChat: function(chatId) {
+      var chat = ChatManager.getChatById(chatId);
+      if (!chat) return;
+
+      this.state.activeChatId = chatId;
+      this.renderChatList();
+      this.navigateToChat();
+      this.elements.welcomeView.classList.add("hidden");
+      this.elements.chatView.classList.remove("hidden");
+      this.elements.topbarTitle.textContent = chat.title;
+      this.elements.messagesContainer.innerHTML = "";
+
+      var self = this;
+      chat.messages.forEach(function(msg) {
+        if (msg.role === "user") {
+          self.renderUserMessage(msg.text);
+        } else {
+          self.renderAiMessage(msg.text, msg.sources);
+        }
+      });
+
+      this.scrollToBottom();
+      this.toggleChatSidebar(false);
+      this.elements.chatInput.focus();
+    },
+
+    renderChatList: function() {
+      var self = this;
+      var listEl = this.elements.chatList;
+      var allChats = ChatManager.getChats();
+      var query = this.state.searchQuery;
+
+      var filtered = allChats;
+      if (query) {
+        filtered = allChats.filter(function(c) {
+          return c.title.toLowerCase().indexOf(query) !== -1;
+        });
+      }
+
+      listEl.innerHTML = "";
+
+      if (filtered.length === 0) {
+        var emptyDiv = document.createElement("div");
+        emptyDiv.className = "chat-empty-state";
+        if (query) {
+          emptyDiv.textContent = "No conversations found";
+        } else {
+          emptyDiv.innerHTML = "No conversations yet.<br>Start a new chat to begin.";
+        }
+        listEl.appendChild(emptyDiv);
+        return;
+      }
+
+      filtered.forEach(function(chat) {
+        var itemWrap = document.createElement("div");
+        itemWrap.className = "chat-item-wrapper" + (chat.id === self.state.activeChatId ? " active" : "");
+        itemWrap.setAttribute("data-id", chat.id);
+
+        var chatBtn = document.createElement("button");
+        chatBtn.className = "chat-item-btn";
+        chatBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="chat-item-title"></span>';
+        chatBtn.querySelector(".chat-item-title").textContent = chat.title;
+        chatBtn.addEventListener("click", function() {
+          self.openChat(chat.id);
+        });
+
+        var moreBtn = document.createElement("button");
+        moreBtn.className = "chat-item-more-btn";
+        moreBtn.setAttribute("aria-label", "More options");
+        moreBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>';
+        
+        moreBtn.addEventListener("click", function(e) {
+          e.stopPropagation();
+          self.openChatActionPopover(chat.id, moreBtn);
+        });
+
+        itemWrap.appendChild(chatBtn);
+        itemWrap.appendChild(moreBtn);
+        listEl.appendChild(itemWrap);
+      });
+    },
+
+    openChatActionPopover: function(chatId, triggerEl) {
+      this.closeAllPopovers();
+      this.state.activeActionChatId = chatId;
+      var popover = this.elements.chatActionPopover;
+      
+      var rect = triggerEl.getBoundingClientRect();
+      popover.style.top = (rect.bottom + 4) + "px";
+      popover.style.left = Math.min(rect.left, window.innerWidth - 170) + "px";
+      popover.classList.remove("hidden");
+    },
+
+    openRenameModal: function(chatId) {
+      var chat = ChatManager.getChatById(chatId);
+      if (!chat) return;
+      this.state.pendingRenameChatId = chatId;
+      this.elements.renameInput.value = chat.title;
+      this.elements.renameModalBackdrop.classList.add("show");
+      this.elements.renameInput.focus();
+    },
+
+    openDeleteModal: function(chatId) {
+      var chat = ChatManager.getChatById(chatId);
+      if (!chat) return;
+      this.state.pendingDeleteChatId = chatId;
+      this.elements.deleteChatTitleSpan.textContent = '"' + chat.title + '"';
+      this.elements.deleteModalBackdrop.classList.add("show");
+    },
+
+    openSourceModal: function(source) {
+      this.elements.modalSourceCode.textContent = source.code || "Indian Standard";
+      this.elements.modalSourceName.textContent = source.name || "Specification Reference";
+      this.elements.modalSourceClause.textContent = source.clause || "Scope & Conformity Guidelines";
+      this.elements.sourceModalBackdrop.classList.add("show");
+    },
+
+    openSettingsModal: function() {
+      this.elements.settingsModalBackdrop.classList.add("show");
+    },
+
+    openProfileModal: function() {
+      var user = this.state.currentUser;
+      if (!user) return;
+      this.elements.profileModalAvatar.textContent = this.getInitials(user.name);
+      this.elements.profileModalName.textContent = user.name;
+      this.elements.profileModalEmail.textContent = user.email;
+      this.elements.profileModalBackdrop.classList.add("show");
+    },
+
+    closeModal: function(modalId) {
+      var m = document.getElementById(modalId);
+      if (m) m.classList.remove("show");
+    },
+
+    /* ---- Conversation Execution ---- */
+    initiateQuestion: function(text) {
+      var newChat = ChatManager.createChat(text, text);
+      this.state.activeChatId = newChat.id;
+      this.renderChatList();
+      this.navigateToChat();
+      this.elements.welcomeView.classList.add("hidden");
+      this.elements.chatView.classList.remove("hidden");
+      this.elements.topbarTitle.textContent = newChat.title;
+      this.elements.messagesContainer.innerHTML = "";
+      
+      this.sendChatMessage(text, true);
+    },
+
+    sendChatMessage: function(text, isFirst) {
+      var self = this;
+      var chatId = this.state.activeChatId;
+      if (!chatId) return;
+
+      this.state.isGenerating = true;
+      this.elements.chatSendBtn.disabled = true;
+
+      // Add & render user message
+      ChatManager.addMessage(chatId, "user", text);
+      this.renderUserMessage(text);
+      this.scrollToBottom();
+
+      // Render typing indicator
+      var typingEl = this.renderTypingIndicator();
+      this.scrollToBottom();
+
+      // Call KnowledgeBase / AIService
+      setTimeout(function() {
+        typingEl.remove();
+        
+        try {
+          var aiRes = KnowledgeBase.findResponse(text);
+          ChatManager.addMessage(chatId, "ai", aiRes.text, aiRes.sources);
+          self.renderAiMessage(aiRes.text, aiRes.sources);
+        } catch(err) {
+          self.renderErrorMessage(text);
+        }
+
+        self.state.isGenerating = false;
+        self.elements.chatSendBtn.disabled = !self.elements.chatInput.value.trim();
+        self.scrollToBottom();
+      }, 700 + Math.random() * 400);
+    },
+
+    renderUserMessage: function(text) {
+      var user = this.state.currentUser;
+      var initials = user ? this.getInitials(user.name) : "You";
+
+      var row = document.createElement("div");
+      row.className = "message-row user";
+      row.innerHTML =
+        '<div class="msg-avatar">' + initials + '</div>' +
+        '<div class="msg-body"><div class="msg-content"></div></div>';
+      
+      row.querySelector(".msg-content").textContent = text;
+      this.elements.messagesContainer.appendChild(row);
+    },
+
+    renderAiMessage: function(text, sources) {
+      var self = this;
+      var row = document.createElement("div");
+      row.className = "message-row ai";
+
+      // AI Avatar Image using the official emblem
+      var avatarHtml =
+        '<div class="msg-avatar">' +
+          '<img src="bis_emblem.png" alt="BIS Sahayak" />' +
+        '</div>';
+
+      var formattedHtml = this.formatMarkdown(text);
+
+      var sourcesHtml = "";
+      if (sources && sources.length > 0) {
+        sourcesHtml =
+          '<div class="sources-card">' +
+            '<div class="sources-header">' +
+              '<span class="sources-title">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>' +
+                'Standard Sources & References' +
+              '</span>' +
+            '</div>' +
+            sources.map(function(s, idx) {
+              return (
+                '<div class="source-item">' +
+                  '<div class="source-info">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+                    '<div class="source-meta">' +
+                      '<div class="source-name">' + s.code + (s.name ? ' &bull; ' + s.name : '') + '</div>' +
+                      '<div class="source-clause">' + s.clause + '</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<button type="button" class="source-action-btn" data-source-idx="' + idx + '">' +
+                    '<span>View source &rarr;</span>' +
+                  '</button>' +
+                '</div>'
+              );
+            }).join("") +
+          '</div>';
+      }
+
+      row.innerHTML =
+        avatarHtml +
+        '<div class="msg-body">' +
+          '<div class="msg-content">' + formattedHtml + '</div>' +
+          sourcesHtml +
+          '<div class="msg-actions">' +
+            '<button type="button" class="btn-msg-action copy-msg-btn" title="Copy message">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>' +
+              '<span>Copy response</span>' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
+      var copyBtn = row.querySelector(".copy-msg-btn");
+      copyBtn.addEventListener("click", function() {
+        var plainText = row.querySelector(".msg-content").innerText;
+        self.copyToClipboard(plainText, "Response copied to clipboard!");
+      });
+
+      row.querySelectorAll(".source-action-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var idx = parseInt(btn.getAttribute("data-source-idx"), 10);
+          if (sources && sources[idx]) {
+            self.openSourceModal(sources[idx]);
+          }
+        });
+      });
+
+      this.elements.messagesContainer.appendChild(row);
+    },
+
+    renderTypingIndicator: function() {
+      var row = document.createElement("div");
+      row.className = "message-row ai";
+      row.innerHTML =
+        '<div class="msg-avatar">' +
+          '<img src="bis_emblem.png" alt="BIS Sahayak" />' +
+        '</div>' +
+        '<div class="msg-body">' +
+          '<div class="typing-indicator">' +
+            '<span style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-right:4px;">BIS Sahayak</span>' +
+            '<div class="typing-dot"></div>' +
+            '<div class="typing-dot"></div>' +
+            '<div class="typing-dot"></div>' +
+          '</div>' +
+        '</div>';
+      this.elements.messagesContainer.appendChild(row);
+      return row;
+    },
+
+    renderErrorMessage: function(originalText) {
+      var self = this;
+      var row = document.createElement("div");
+      row.className = "message-row ai";
+      row.innerHTML =
+        '<div class="msg-avatar">' +
+          '<img src="bis_emblem.png" alt="BIS Sahayak" />' +
+        '</div>' +
+        '<div class="msg-body">' +
+          '<div class="msg-error-box">' +
+            '<span>Something went wrong while fetching that answer.</span>' +
+            '<button type="button" class="btn-retry">Try again</button>' +
+          '</div>' +
+        '</div>';
+
+      row.querySelector(".btn-retry").addEventListener("click", function() {
+        row.remove();
+        self.sendChatMessage(originalText);
+      });
+
+      this.elements.messagesContainer.appendChild(row);
+    },
+
+    formatMarkdown: function(text) {
+      if (!text) return "";
+      var html = text;
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+      html = html.replace(/^\• (.*$)/gim, '<li>$1</li>');
+      html = html.replace(/^[0-9]+\. (.*$)/gim, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>');
+      html = html.replace(/<\/ul>\s*<ul>/gim, '');
+      html = html.replace(/\n\n/g, '<p></p>');
+      return html;
+    },
+
+    copyToClipboard: function(text, toastMsg) {
+      var self = this;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          self.showToast(toastMsg);
+        });
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        self.showToast(toastMsg);
+      }
+    },
+
+    showToast: function(msg) {
+      var container = document.getElementById("toastContainer");
+      var toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML =
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>' +
+        '<span>' + msg + '</span>';
+      container.appendChild(toast);
+
+      setTimeout(function() {
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity 0.25s ease";
+        setTimeout(function() { toast.remove(); }, 250);
+      }, 2500);
+    },
+
+    scrollToBottom: function() {
+      var scrollEl = this.elements.chatMessagesScroll;
+      requestAnimationFrame(function() {
+        scrollEl.scrollTop = scrollEl.scrollHeight;
+      });
+    }
+  };
+
+  // Initialize application on DOM content ready
+  document.addEventListener("DOMContentLoaded", function() {
+    UI.init();
+  });
+
+})();
+</script>
+</body>
+</html>
