@@ -1,0 +1,568 @@
+[
+  {
+    "id": "IS_302-1",
+    "standard_no": "IS 302 (Part 1)",
+    "title": "Safety of Household and Similar Electrical Appliances - General Requirements",
+    "scheme": "Compulsory Registration Scheme (CRS)",
+    "category": "Electrical Appliances",
+    "last_revised": "2008",
+    "content": "IS 302 (Part 1) specifies general safety requirements for household and similar electrical appliances with a rated voltage not exceeding 250V for single phase appliances and 480V for other appliances. It covers protection against electric shock, mechanical hazards, and excessive temperatures. Manufacturers of electrical appliances such as kettles, mixers, irons, and toasters must comply with this standard to obtain BIS registration under the Compulsory Registration Scheme (CRS) before selling in the Indian market."
+  },
+  {
+    "id": "IS_16046",
+    "standard_no": "IS 16046",
+    "title": "Electric Kettles - Specification",
+    "scheme": "Compulsory Registration Scheme (CRS)",
+    "category": "Electrical Appliances",
+    "last_revised": "2018",
+    "content": "IS 16046 specifies safety and performance requirements specifically for electric kettles used for boiling water. It builds on IS 302 (Part 1) general requirements and adds kettle-specific tests including boil-dry protection, spillage safety, and thermal cut-off performance. Electric kettle manufacturers must register under CRS and mark products with the Standard Mark once compliance is verified through a BIS-recognized testing laboratory."
+  },
+  {
+    "id": "HALLMARK_SCHEME",
+    "standard_no": "IS 1417 / BIS Hallmarking Scheme",
+    "title": "Hallmarking of Gold and Silver Jewellery",
+    "scheme": "BIS Hallmarking Scheme",
+    "category": "Precious Metals",
+    "last_revised": "2021",
+    "content": "BIS Hallmarking is mandatory for gold jewellery and artefacts sold in India, covering purity grades of 14, 18, 20, 22, 23 and 24 karat. A hallmark consists of the BIS logo, purity/fineness grade, HUID (Hallmark Unique Identification number, a 6-digit alphanumeric code), and the Assaying and Hallmarking Centre's mark. Consumers can verify authenticity of a hallmark via the BIS CARE app by entering the HUID number. Jewellers must register with BIS and get jewellery tested at an Assaying and Hallmarking Centre (AHC) recognized by BIS."
+  },
+  {
+    "id": "ISI_CERT_PROCESS",
+    "standard_no": "N/A - Process Document",
+    "title": "ISI Mark Product Certification Process",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Certification Process",
+    "last_revised": "2023",
+    "content": "The ISI Mark certification process involves: (1) Identify the applicable Indian Standard for the product, (2) Apply online via the BIS Manak Online portal with company and product details, (3) Factory inspection by a BIS officer to assess manufacturing and quality control capability, (4) Sample testing at a BIS-recognized or in-house lab approved by BIS, (5) Grant of license upon satisfactory inspection and test results, (6) Annual surveillance including surprise inspections and market sample testing to maintain the license. License validity is typically 2 years, renewable."
+  },
+  {
+    "id": "CRS_SCHEME",
+    "standard_no": "N/A - Scheme Document",
+    "title": "Compulsory Registration Scheme (CRS) Overview",
+    "scheme": "Compulsory Registration Scheme (CRS)",
+    "category": "Certification Process",
+    "last_revised": "2023",
+    "content": "The Compulsory Registration Scheme under the Electronics and IT Goods (Requirements for Compulsory Registration) Order covers electronics and IT products such as laptops, mobile phone chargers, LED lights, and electrical appliances notified by MeitY/BIS. Unlike full ISI certification, CRS requires the manufacturer to test the product at a BIS-recognized lab and self-declare conformity, register on the BIS website, and use the Standard Mark (R-Number) on the product. No factory audit is typically required for CRS, making it a lighter-weight scheme than full product certification, but the notified product list must be checked as it is periodically updated."
+  },
+  {
+    "id": "LAB_RECOGNITION",
+    "standard_no": "N/A - Scheme Document",
+    "title": "BIS Recognized Testing Laboratories",
+    "scheme": "Laboratory Recognition Scheme",
+    "category": "Testing",
+    "last_revised": "2022",
+    "content": "BIS recognizes third-party testing laboratories that meet ISO/IEC 17025 accreditation and BIS-specific technical criteria to test products against Indian Standards on behalf of manufacturers. Manufacturers can search the list of BIS-recognized labs by product category on the BIS website. Recognized labs issue test reports accepted for CRS registration and ISI certification. Manufacturers may also apply to get their own in-house lab recognized by BIS for self-certification purposes under certain schemes."
+  },
+  {
+    "id": "CONSUMER_COMPLAINT",
+    "standard_no": "N/A - Consumer Guidance",
+    "title": "Consumer Grievance and Complaint Redressal",
+    "scheme": "Consumer Affairs",
+    "category": "Consumer Guidance",
+    "last_revised": "2023",
+    "content": "Consumers who find a defective ISI-marked or hallmarked product, or suspect a counterfeit BIS mark, can file a complaint through the BIS CARE portal or mobile app. Complaints can include product details, license/HUID number, and photographs. BIS investigates complaints against licensees and can suspend or cancel licenses for non-compliance. Consumers can also verify the authenticity of any ISI license number or hallmark HUID directly on the BIS CARE app before or after purchase."
+  },
+  {
+    "id": "STANDARDS_CLUB",
+    "standard_no": "N/A - Scheme Document",
+    "title": "BIS Standards Clubs for Students",
+    "scheme": "Standards Clubs",
+    "category": "Education",
+    "last_revised": "2022",
+    "content": "BIS Standards Clubs are formed in schools to create awareness among students about the importance of standardization, quality, and certification. Schools can register with their local BIS branch office to form a Standards Club, which conducts activities like quizzes, awareness sessions, and factory visits. This is part of BIS's broader outreach to build a quality-consciousness culture from a young age."
+  },
+  {
+    "id": "IS_3196_PT2",
+    "standard_no": "IS 3196 (Part 2): 2006",
+    "title": "Welded Low Carbon Steel Cylinders Exceeding 5 Litres Water Capacity for Low Pressure Liquefiable Gases - Cylinders for Liquefiable Non Toxic Gases Other Than LPG",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Gas Cylinders & Pressure Vessels",
+    "last_revised": "2020",
+    "content": "IS 3196 (Part 2): 2006 specifies requirements for welded low carbon steel cylinders exceeding 5 litres water capacity for low pressure liquefiable non-toxic gases other than LPG. Raw material requirements include steel per IS 6240 or IS 15914 and valve fittings per IS 3224. Scheme of Inspection and Testing requires hydrostatic, pneumatic, burst, and acceptance testing, alongside strict quality control units and batch definitions."
+  },
+  {
+    "id": "IS_13334_PT2",
+    "standard_no": "IS 13334 (Part 2): 2014",
+    "title": "Skimmed Milk Powder Part 2 Extra Grade - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Food & Agriculture",
+    "last_revised": "2020",
+    "content": "IS 13334 (Part 2): 2014 covers specifications for spray-dried Extra Grade Skimmed Milk Powder. The product manual dictates testing for milk fat, SNF, insolubility index, titrable acidity, scorched particles, total ash, lactate content, and microbiological safety including coliforms, E. coli, Salmonella, and Listeria monocytogenes. Control units are based on 24-hour continuous production lots with rigorous sampling intervals during packing."
+  },
+  {
+    "id": "IS_1489_PT1",
+    "standard_no": "IS 1489 (Part 1): 2015",
+    "title": "Portland Pozzolana Cement - Fly Ash Based - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Civil Engineering & Building Materials",
+    "last_revised": "2019",
+    "content": "IS 1489 (Part 1): 2015 covers fly ash-based Portland Pozzolana Cement (PPC). Raw materials require OPC (IS 269), Clinker (IS 16353), and Fly Ash (IS 3812 Part 1). Testing controls involve chemical parameters (insoluble residue, magnesia, SO3, LOI, chloride) and physical properties (fineness, soundness by Le-Chatelier/Autoclave, setting time, and compressive strength). Detailed marking rules apply for bag details and color-coding."
+  },
+  {
+    "id": "IS_2494_PT1",
+    "standard_no": "IS 2494 (Part 1): 1994",
+    "title": "Endless V-Belts for Industrial Purposes - General Purposes",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Mechanical Engineering",
+    "last_revised": "2019",
+    "content": "IS 2494 (Part 1): 1994 covers endless V-belts used for general power transmission in industrial applications across cross-section symbols Z, A, B, C, D, and E. Control levels require testing cross-sectional dimensions, pitch length, and tensile strength (tested quarterly or upon composition changes). A control unit consists of belts of the same cross section manufactured from a single batch of cord, fiber, and rubber mould in a day."
+  },
+  {
+    "id": "IS_3196_PT4",
+    "standard_no": "IS 3196 (Part 4): 2001",
+    "title": "Welded Low Carbon Steel Cylinders Exceeding 5 Litre Water Capacity for Low Pressure Liquefiable Gases - Cylinders for Toxic and Corrosive Gases",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Gas Cylinders & Pressure Vessels",
+    "last_revised": "2020",
+    "content": "IS 3196 (Part 4): 2001 specifies requirements for welded low carbon steel cylinders exceeding 5 litres water capacity intended for toxic and corrosive gases. Materials require IS 6240 steel sheets/plates and IS 3224 valves. Strict controls demand radiographic examination, liquid dye penetrant, magnetic particle testing, hydrostatic stretch test, burst test, and acceptance mechanical tests for every control unit of 202 or fewer cylinders."
+  }
+,
+  {
+    "id": "IS_302-1",
+    "standard_no": "IS 302 (Part 1)",
+    "title": "Safety of Household and Similar Electrical Appliances - General Requirements",
+    "scheme": "Compulsory Registration Scheme (CRS)",
+    "category": "Electrical Appliances",
+    "last_revised": "2008",
+    "content": "IS 302 (Part 1) specifies general safety requirements for household and similar electrical appliances with a rated voltage not exceeding 250V for single phase appliances and 480V for other appliances. It covers protection against electric shock, mechanical hazards, and excessive temperatures. Manufacturers of electrical appliances such as kettles, mixers, irons, and toasters must comply with this standard to obtain BIS registration under the Compulsory Registration Scheme (CRS) before selling in the Indian market."
+  },
+  {
+    "id": "IS_16046",
+    "standard_no": "IS 16046",
+    "title": "Electric Kettles - Specification",
+    "scheme": "Compulsory Registration Scheme (CRS)",
+    "category": "Electrical Appliances",
+    "last_revised": "2018",
+    "content": "IS 16046 specifies safety and performance requirements specifically for electric kettles used for boiling water. It builds on IS 302 (Part 1) general requirements and adds kettle-specific tests including boil-dry protection, spillage safety, and thermal cut-off performance. Electric kettle manufacturers must register under CRS and mark products with the Standard Mark once compliance is verified through a BIS-recognized testing laboratory."
+  },
+  {
+    "id": "HALLMARK_SCHEME",
+    "standard_no": "IS 1417 / BIS Hallmarking Scheme",
+    "title": "Hallmarking of Gold and Silver Jewellery",
+    "scheme": "BIS Hallmarking Scheme",
+    "category": "Precious Metals",
+    "last_revised": "2021",
+    "content": "BIS Hallmarking is mandatory for gold jewellery and artefacts sold in India, covering purity grades of 14, 18, 20, 22, 23 and 24 karat. A hallmark consists of the BIS logo, purity/fineness grade, HUID (Hallmark Unique Identification number, a 6-digit alphanumeric code), and the Assaying and Hallmarking Centre's mark. Consumers can verify authenticity of a hallmark via the BIS CARE app by entering the HUID number. Jewellers must register with BIS and get jewellery tested at an Assaying and Hallmarking Centre (AHC) recognized by BIS."
+  },
+  {
+    "id": "ISI_CERT_PROCESS",
+    "standard_no": "N/A - Process Document",
+    "title": "ISI Mark Product Certification Process",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Certification Process",
+    "last_revised": "2023",
+    "content": "The ISI Mark certification process involves: (1) Identify the applicable Indian Standard for the product, (2) Apply online via the BIS Manak Online portal with company and product details, (3) Factory inspection by a BIS officer to assess manufacturing and quality control capability, (4) Sample testing at a BIS-recognized or in-house lab approved by BIS, (5) Grant of license upon satisfactory inspection and test results, (6) Annual surveillance including surprise inspections and market sample testing to maintain the license. License validity is typically 2 years, renewable."
+  },
+  {
+    "id": "CRS_SCHEME",
+    "standard_no": "N/A - Scheme Document",
+    "title": "Compulsory Registration Scheme (CRS) Overview",
+    "scheme": "Compulsory Registration Scheme (CRS)",
+    "category": "Certification Process",
+    "last_revised": "2023",
+    "content": "The Compulsory Registration Scheme under the Electronics and IT Goods (Requirements for Compulsory Registration) Order covers electronics and IT products such as laptops, mobile phone chargers, LED lights, and electrical appliances notified by MeitY/BIS. Unlike full ISI certification, CRS requires the manufacturer to test the product at a BIS-recognized lab and self-declare conformity, register on the BIS website, and use the Standard Mark (R-Number) on the product. No factory audit is typically required for CRS, making it a lighter-weight scheme than full product certification, but the notified product list must be checked as it is periodically updated."
+  },
+  {
+    "id": "LAB_RECOGNITION",
+    "standard_no": "N/A - Scheme Document",
+    "title": "BIS Recognized Testing Laboratories",
+    "scheme": "Laboratory Recognition Scheme",
+    "category": "Testing",
+    "last_revised": "2022",
+    "content": "BIS recognizes third-party testing laboratories that meet ISO/IEC 17025 accreditation and BIS-specific technical criteria to test products against Indian Standards on behalf of manufacturers. Manufacturers can search the list of BIS-recognized labs by product category on the BIS website. Recognized labs issue test reports accepted for CRS registration and ISI certification. Manufacturers may also apply to get their own in-house lab recognized by BIS for self-certification purposes under certain schemes."
+  },
+  {
+    "id": "CONSUMER_COMPLAINT",
+    "standard_no": "N/A - Consumer Guidance",
+    "title": "Consumer Grievance and Complaint Redressal",
+    "scheme": "Consumer Affairs",
+    "category": "Consumer Guidance",
+    "last_revised": "2023",
+    "content": "Consumers who find a defective ISI-marked or hallmarked product, or suspect a counterfeit BIS mark, can file a complaint through the BIS CARE portal or mobile app. Complaints can include product details, license/HUID number, and photographs. BIS investigates complaints against licensees and can suspend or cancel licenses for non-compliance. Consumers can also verify the authenticity of any ISI license number or hallmark HUID directly on the BIS CARE app before or after purchase."
+  },
+  {
+    "id": "STANDARDS_CLUB",
+    "standard_no": "N/A - Scheme Document",
+    "title": "BIS Standards Clubs for Students",
+    "scheme": "Standards Clubs",
+    "category": "Education",
+    "last_revised": "2022",
+    "content": "BIS Standards Clubs are formed in schools to create awareness among students about the importance of standardization, quality, and certification. Schools can register with their local BIS branch office to form a Standards Club, which conducts activities like quizzes, awareness sessions, and factory visits. This is part of BIS's broader outreach to build a quality-consciousness culture from a young age."
+  },
+  {
+    "id": "IS_3196_PT2",
+    "standard_no": "IS 3196 (Part 2): 2006",
+    "title": "Welded Low Carbon Steel Cylinders Exceeding 5 Litres Water Capacity for Low Pressure Liquefiable Gases - Cylinders for Liquefiable Non Toxic Gases Other Than LPG",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Gas Cylinders & Pressure Vessels",
+    "last_revised": "2020",
+    "content": "IS 3196 (Part 2): 2006 specifies requirements for welded low carbon steel cylinders exceeding 5 litres water capacity for low pressure liquefiable non-toxic gases other than LPG. Raw material requirements include steel per IS 6240 or IS 15914 and valve fittings per IS 3224. Scheme of Inspection and Testing requires hydrostatic, pneumatic, burst, and acceptance testing, alongside strict quality control units and batch definitions."
+  },
+  {
+    "id": "IS_13334_PT2",
+    "standard_no": "IS 13334 (Part 2): 2014",
+    "title": "Skimmed Milk Powder Part 2 Extra Grade - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Food & Agriculture",
+    "last_revised": "2020",
+    "content": "IS 13334 (Part 2): 2014 covers specifications for spray-dried Extra Grade Skimmed Milk Powder. The product manual dictates testing for milk fat, SNF, insolubility index, titrable acidity, scorched particles, total ash, lactate content, and microbiological safety including coliforms, E. coli, Salmonella, and Listeria monocytogenes. Control units are based on 24-hour continuous production lots with rigorous sampling intervals during packing."
+  },
+  {
+    "id": "IS_1489_PT1",
+    "standard_no": "IS 1489 (Part 1): 2015",
+    "title": "Portland Pozzolana Cement - Fly Ash Based - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Civil Engineering & Building Materials",
+    "last_revised": "2019",
+    "content": "IS 1489 (Part 1): 2015 covers fly ash-based Portland Pozzolana Cement (PPC). Raw materials require OPC (IS 269), Clinker (IS 16353), and Fly Ash (IS 3812 Part 1). Testing controls involve chemical parameters (insoluble residue, magnesia, SO3, LOI, chloride) and physical properties (fineness, soundness by Le-Chatelier/Autoclave, setting time, and compressive strength). Detailed marking rules apply for bag details and color-coding."
+  },
+  {
+    "id": "IS_2494_PT1",
+    "standard_no": "IS 2494 (Part 1): 1994",
+    "title": "Endless V-Belts for Industrial Purposes - General Purposes",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Mechanical Engineering",
+    "last_revised": "2019",
+    "content": "IS 2494 (Part 1): 1994 covers endless V-belts used for general power transmission in industrial applications across cross-section symbols Z, A, B, C, D, and E. Control levels require testing cross-sectional dimensions, pitch length, and tensile strength (tested quarterly or upon composition changes). A control unit consists of belts of the same cross section manufactured from a single batch of cord, fiber, and rubber mould in a day."
+  },
+  {
+    "id": "IS_3196_PT4",
+    "standard_no": "IS 3196 (Part 4): 2001",
+    "title": "Welded Low Carbon Steel Cylinders Exceeding 5 Litre Water Capacity for Low Pressure Liquefiable Gases - Cylinders for Toxic and Corrosive Gases",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Gas Cylinders & Pressure Vessels",
+    "last_revised": "2020",
+    "content": "IS 3196 (Part 4): 2001 specifies requirements for welded low carbon steel cylinders exceeding 5 litres water capacity intended for toxic and corrosive gases. Materials require IS 6240 steel sheets/plates and IS 3224 valves. Strict controls demand radiographic examination, liquid dye penetrant, magnetic particle testing, hydrostatic stretch test, burst test, and acceptance mechanical tests for every control unit of 202 or fewer cylinders."
+  }
+,
+  {
+    "id": "IS_374",
+    "standard_no": "IS 374: 2019",
+    "title": "Electric Ceiling Type Fans",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2026",
+    "content": "IS 374: 2019 specifies standard requirements for electric ceiling type fans driven by squirrel cage induction motors (capacitor type) or brushless DC motor fans, with or without speed regulators/remote control devices[cite: 11]. The manual details sampling guidelines, grouping rules, list of required test equipment (such as tachometers and vane anemometers), and the scheme of inspection and testing (QAP) including safety, performance, and electrical insulation tests[cite: 11]."
+  },
+  {
+    "id": "IS_3650",
+    "standard_no": "IS 3650:2026",
+    "title": "Combination Side Cutting Pliers",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Hand Tools",
+    "last_revised": "2026",
+    "content": "IS 3650:2026 covers requirements for combination side cutting pliers classified across various nominal sizes (160 mm to 250 mm), handle types (insulated/uninsulated), and materials for head, handle, and rivets (chrome vanadium, chrome steel, carbon steel)[cite: 12]. The product manual provides sampling rules, list of test equipment (e.g., hardness tester, torsion test apparatus, insulation tester), and control levels for dimensional, mechanical, hardness, cutting, and insulation testing[cite: 12]."
+  },
+  {
+    "id": "IS_11652",
+    "standard_no": "IS 11652: 2017",
+    "title": "Textiles - High Density Polyethylene (HDPE)/ Polypropylene (PP) Woven Sacks for Packaging of 50 kg Cement - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Textiles & Packaging",
+    "last_revised": "2025",
+    "content": "IS 11652: 2017 specifies requirements for HDPE and PP woven sacks used for packaging 50 kg cement, including options for gusseting, lamination, and UV stabilization[cite: 13]. The manual details raw material compliance, required testing apparatus (tensile testing machines, drop impact apparatus, muffle furnace, UV test chambers), and quality assurance control levels for parameters such as breaking strength, drop impact, ash content, and seam strength[cite: 13]."
+  },
+  {
+    "id": "IS_303",
+    "standard_no": "IS 303: 2024",
+    "title": "Plywood for General Purpose",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Wood & Timber Products",
+    "last_revised": "2026",
+    "content": "IS 303: 2024 covers general-purpose plywood classified by grades (MR, BWR, BWP), bending classes (10 to 50), appearance types (AA to CC), thickness ranges, and formaldehyde classes (E1/E2)[cite: 14]. The manual outlines grouping guidelines for licensing, laboratory test equipment requirements (hot air oven, tensile testing machine, water bath, extraction apparatus), and inspection and testing levels for moisture content, water resistance, static bending strength, and formaldehyde emission[cite: 14]."
+  },
+  {
+    "id": "IS_4003_PT1",
+    "standard_no": "IS 4003 (Part 1):2026",
+    "title": "Pipe Wrenches (General Purpose)",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Hand Tools",
+    "last_revised": "2026",
+    "content": "IS 4003 (Part 1):2026 specifies general-purpose pipe wrenches across nominal sizes ranging from 200 mm to 1200 mm[cite: 15]. The manual details raw material requirements, grouping guidelines (testing lowest and highest nominal sizes to cover the range), essential testing equipment (test rigs, torque testers, hardness testing machines), and quality assurance inspection procedures including static load and static shock load tests[cite: 15]."
+  }
+,
+  {
+    "id": "IS_14407",
+    "standard_no": "IS 14407:2023",
+    "title": "Aluminium Cans for Beverages",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Packaging & Containers",
+    "last_revised": "2023",
+    "content": "IS 14407:2023 specifies standard requirements for aluminium cans used in packaging beverages[cite: 16]. The manual outlines sampling guidelines, required laboratory testing sample quantities (100 pcs), and a scheme of inspection and testing (SIT) covering routine physical/mechanical checks as well as chemical parameters such as overall and specific migration limits[cite: 16]."
+  },
+  {
+    "id": "IS_12795",
+    "standard_no": "IS 12795:2020",
+    "title": "Linear Alkyl Benzene",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Chemicals & Petrochemicals",
+    "last_revised": "2020",
+    "content": "IS 12795:2020 covers specifications and requirements for Linear Alkyl Benzene (LAB)[cite: 17]. The product manual specifies sample quantities for laboratory testing (1 litre) and defines control levels and testing frequencies for key chemical parameters including moisture, doctor test, bromine index, molecular weight, sulphonability, flash point, tetralins, and ready biodegradability[cite: 17]."
+  },
+  {
+    "id": "IS_15298_PT4",
+    "standard_no": "IS 15298 (Part 4):2024",
+    "title": "Personal Protective Equipment - Part 4 Occupational Footwear",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Personal Protective Equipment",
+    "last_revised": "2024",
+    "content": "IS 15298 (Part 4):2024 specifies requirements for occupational footwear[cite: 18]. The manual details sampling guidelines (4 pairs of shoes per variety), test equipment requirements, and quality control levels for physical/mechanical properties along with raw material compliance testing for chemical parameters like innocuousness and lead content[cite: 18]."
+  },
+  {
+    "id": "IS_14625",
+    "standard_no": "IS 14625:2015",
+    "title": "Plastics Feeding Bottles",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Plastics & Consumer Goods",
+    "last_revised": "2015",
+    "content": "IS 14625:2015 covers safety and quality standards for plastic feeding bottles[cite: 19]. The manual specifies sample quantities required for laboratory testing (60 bottles) and establishes testing frequencies for physical dimensions/capacity and major chemical safety parameters including Bisphenol A (BPA) content and specific migration of heavy elements[cite: 19]."
+  },
+  {
+    "id": "IS_14543",
+    "standard_no": "IS 14543:2016",
+    "title": "Packaged Drinking Water (Other than Packaged Natural Mineral Water)",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Food & Beverages",
+    "last_revised": "2016",
+    "content": "IS 14543:2016 outlines requirements for packaged drinking water[cite: 20]. The product manual provides sampling, inspection, and quality assurance guidelines, including specific surveillance testing rules for chemical parameters such as pesticide residues[cite: 20]."
+  }
+,
+  {
+    "id": "IS_302_2_3",
+    "standard_no": "IS 302 (Part 2/Sec 3): 2024",
+    "title": "Safety of Household and Similar Electrical Appliances - Part 2: Particular Requirements - Section 3: Electric Irons",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2024",
+    "content": "IS 302 (Part 2/Sec 3): 2024 covers safety requirements for electric dry irons, steam irons, and cordless irons for household use[cite: 5]. The manual details sampling guidelines, grouping rules, list of required test equipment (such as earth continuity testers, high voltage testers, leakage current apparatus, and temperature rise test rigs), and the scheme of inspection and testing (SIT/QAP) including routine electrical safety, temperature rise, and mechanical stability tests[cite: 5]."
+  },
+  {
+    "id": "IS_15683",
+    "standard_no": "IS 15683: 2018",
+    "title": "Portable Fire Extinguishers — Performance and Construction — Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Fire Safety",
+    "last_revised": "2018",
+    "content": "IS 15683: 2018 specifies performance, construction, and safety requirements for portable fire extinguishers across various extinguishing media (water, foam, powder, CO2, clean agent)[cite: 22]. The product manual outlines grouping guidelines, list of essential testing equipment (hydraulic pressure test rig, burst pressure apparatus, discharge test setups, temperature cycling chambers), and control levels for dimensional, pressure resistance, fire rating, and mechanical strength testing[cite: 22]."
+  },
+  {
+    "id": "IS_4246",
+    "standard_no": "IS 4246: 2025",
+    "title": "Domestic Gas Stoves and Built-in Hobs for use with Liquefied Petroleum Gases",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Gas Appliances",
+    "last_revised": "2025",
+    "content": "IS 4246: 2025 specifies design, safety, structural, and performance requirements for domestic LPG gas stoves and built-in hobs featuring single or multiple burners[cite: 23]. The manual details raw material compliance, required testing apparatus (gas leakage test rigs, combustion testing apparatus, thermal efficiency test bench, flame stability rigs), and quality assurance inspection procedures for parameters such as gas soundness, thermal efficiency, combustion performance, and temperature rise[cite: 23]."
+  },
+  {
+    "id": "IS_13428",
+    "standard_no": "IS 13428: 2024",
+    "title": "Packaged Natural Mineral Water — Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Food & Beverage",
+    "last_revised": "2024",
+    "content": "IS 13428: 2024 specifies requirements and methods of sampling and testing for packaged natural mineral water sourced from underground natural or drilled springs. The manual outlines source hygienic requirements, required laboratory equipment for chemical, physical, and microbiological parameters (pH meter, turbidity meter, spectrophotometer, incubation systems, gas chromatography), and the scheme of inspection and testing for batch-wise quality assurance and contaminant verification."
+  }
+,
+  {
+    "id": "IS_4151",
+    "standard_no": "IS 4151:2015",
+    "title": "Protective Helmet for Two Wheeler Riders",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Personal Protective Equipment",
+    "last_revised": "2024",
+    "content": "IS 4151:2015 specifies standard requirements for protective helmets used by two-wheeler riders, with or without a visor and lower face cover[cite: 26]. The product manual outlines raw material guidelines, grouping rules (testing each model/design, type, and size), required test equipment (such as spray cabinets, impact/penetration resistance apparatus, headforms, and conditioning chambers), and the scheme of inspection and testing (QAP) including impact absorption, dynamic retention system, rigidity, and audibility tests[cite: 26]."
+  },
+  {
+    "id": "IS_1660",
+    "standard_no": "IS 1660:2024",
+    "title": "Wrought and Cast Aluminium Utensils",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Kitchenware & Cookware",
+    "last_revised": "2025",
+    "content": "IS 1660:2024 covers requirements for wrought and cast aluminium utensils classified across groups (utensils, compartmental trays, lunch boxes, thick bottom utensils) and coatings (plain, hard anodic, non-stick, ceramic, powder coated)[cite: 27]. The manual details raw material specifications, grouping rules, test equipment (micrometer, coat thickness meter, gas stove, salt water corrosion test set up), and levels of control for dimensional, coating thickness, adhesion, thermal shock, and toxic metal testing[cite: 27]."
+  },
+  {
+    "id": "IS_4250",
+    "standard_no": "IS 4250:2025",
+    "title": "Electric Food-Mixers (Liquidizers and Grinders) and Centrifugal Juicers - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2025",
+    "content": "IS 4250:2025 specifies requirements for electric food-mixers, liquidizers, grinders, and centrifugal juicers[cite: 28]. The manual provides grouping guidelines for model testing, a comprehensive list of test equipment (high voltage tester, glow wire test apparatus, humidity chamber, torque wrenches, sieves set), and a quality assurance scheme outlining routine and sub-contracted tests for electrical safety, power input, moisture resistance, mechanical strength, and bowl temperature withstand capabilities[cite: 28]."
+  },
+  {
+    "id": "IS_17803",
+    "standard_no": "IS 17803:2022",
+    "title": "Potable Water Bottles (Metallic)",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Containers & Packaging",
+    "last_revised": "2025",
+    "content": "IS 17803:2022 covers standard specifications for metallic potable water bottles made of copper, stainless steel, or aluminium with various coating options and accessories[cite: 29]. The document details raw material standards, grouping criteria by material/capacity/coating, testing equipment (pendulum impact fixture, pressure gauge, surfactant, inclined plane), and inspection protocols for leakage, capacity, impact resistance, strap/cord strength, stability, and leaching/sensorial safety[cite: 29]."
+  },
+  {
+    "id": "IS_14543",
+    "standard_no": "IS 14543:2024",
+    "title": "Packaged Drinking Water (Other than Packaged Natural Mineral Water) - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Food & Beverage / Water",
+    "last_revised": "2025",
+    "content": "IS 14543:2024 specifies requirements for packaged drinking water derived from surface, civic, underground, or sea water sources subjected to prescribed treatments and disinfection[cite: 30]. The product manual covers licensing guidelines, hygiene checklists, factory and third-party laboratory sampling protocols (for chemical, microbiological, pesticide residue, and radioactive residue testing), container packaging requirements, and enforcement actions for non-conformity[cite: 30]."
+  }
+,
+  {
+    "id": "IS_13334_PT2",
+    "standard_no": "IS 13334 (Part 2): 2025",
+    "title": "Skimmed Milk Powder - Specification Part 2 Extra Grade",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Dairy Products",
+    "last_revised": "2026",
+    "content": "IS 13334 (Part 2): 2025 specifies requirements for extra-grade skimmed milk powder produced via spray drying[cite: 31]. The manual details raw material safety guidelines (freedom from neutralizers, preservatives, and adulterants), required test equipment (such as atomic absorption spectrometers, drying ovens, Kjeldahl digestion blocks, and HPLC/LC-MS systems), and quality assurance inspection levels for chemical, physical, and microbiological parameters[cite: 31]."
+  },
+  {
+    "id": "IS_13334_PT1",
+    "standard_no": "IS 13334 (Part 1): 2025",
+    "title": "Skimmed Milk Powder - Specification Part 1 Standard Grade",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Dairy Products",
+    "last_revised": "2026",
+    "content": "IS 13334 (Part 1): 2025 outlines specification requirements for standard-grade skimmed milk powder produced by spray drying or roller drying, including repacking guidelines[cite: 32]. The manual covers sampling procedures, test equipment lists for moisture, protein, fat, ash, and pathogen analysis, along with quality assurance testing controls and batch inspection levels[cite: 32]."
+  },
+  {
+    "id": "IS_3315",
+    "standard_no": "IS 3315: 2024",
+    "title": "Direct Evaporative Air Cooler",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2026",
+    "content": "IS 3315: 2024 specifies requirements for direct evaporative air coolers (desert coolers) classified by enclosure material, airflow type, air delivery, power input, cooling efficiency, and EER[cite: 33]. The manual details grouping guidelines, essential test apparatus (including anemometers, decibel meters, pressure gauges, and high-voltage electrical testers), and Quality Assurance Plan (QAP) inspection levels for routine and performance testing[cite: 33]."
+  },
+  {
+    "id": "IS_14433",
+    "standard_no": "IS 14433: 2022",
+    "title": "Infant Milk Substitutes - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Dairy & Nutritional Products",
+    "last_revised": "2026",
+    "content": "IS 14433: 2022 specifies standard requirements for infant milk substitutes categorized as Type I (Infant milk food) and Type II (Infant formula)[cite: 34]. The manual details grouping rules, sampling guidelines, required laboratory testing equipment (such as UHPLC-MS/MS systems, spectrophotometers, Kjeldahl apparatus, and muffle furnaces), and quality control testing levels for compositional, vitamin, mineral, and hygienic compliance[cite: 34]."
+  }
+,
+  {
+    "id": "IS_17631",
+    "standard_no": "IS 17631:2022",
+    "title": "Work Chairs",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Furniture",
+    "last_revised": "2026",
+    "content": "IS 17631:2022 specifies requirements for completely manufactured, fabricated, or ready-to-assemble work chairs, covering models with or without reclining provisions, castors, or footrests[cite: 36]. The manual details grouping rules for lead model selection based on adverse safety parameters, required test equipment (micrometers, seat-loading pads, armrest durability apparatus), and the scheme of inspection and testing (QAP) for dimensional, safety, stability, static strength, and durability testing[cite: 36]."
+  },
+  {
+    "id": "IS_17635",
+    "standard_no": "IS 17635:2022",
+    "title": "Beds",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Furniture",
+    "last_revised": "2026",
+    "content": "IS 17635:2022 covers performance and safety requirements for adult domestic and non-domestic beds, including framed and unframed units with or without headboards and storage elements[cite: 37]. The product manual outlines raw material testing compliance, sampling rules, list of required test apparatus (impactors, test mattresses, load pads), and quality control levels for stability, vertical/horizontal static load, durability, and impact testing[cite: 37]."
+  },
+  {
+    "id": "IS_2347",
+    "standard_no": "IS 2347:2023",
+    "title": "Domestic Pressure Cooker",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Consumer Goods & Appliances",
+    "last_revised": "2026",
+    "content": "IS 2347:2023 details specifications for domestic pressure cookers categorized across capacity groups, materials (Aluminium, Stainless Steel, 3-ply), coatings, and lid/bottom types[cite: 38]. The manual specifies raw material standards, required laboratory test equipment (hydraulic proof pressure setups, air compressors, coating meters), guidelines for shared anodizing facilities, and levels of control for air pressure, proof pressure, operating pressure, and bursting pressure tests[cite: 38]."
+  },
+  {
+    "id": "IS_9873_PT1",
+    "standard_no": "IS 9873 (Part 1): 2025",
+    "title": "Safety of Toys Part 1 Safety Aspects Related to Mechanical and Physical Properties",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Toys & Children's Products",
+    "last_revised": "2026",
+    "content": "IS 9873 (Part 1): 2025 establishes mechanical and physical safety requirements for toys, classifying non-electric and electric toys across various age groups, categories, and sub-categories[cite: 39]. The manual outlines grouping guidelines into series, essential test equipment (small parts cylinders, sharp edge/point testers, sound pressure meters, drop test impact surfaces), and scheme of inspection for abuse testing, flammability, element migration, and structural integrity[cite: 39]."
+  }
+,
+  {
+    "id": "IS_374",
+    "standard_no": "IS 374: 2019",
+    "title": "Electric Ceiling Type Fans",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2026",
+    "content": "IS 374: 2019 specifies standard requirements for electric ceiling type fans driven by squirrel cage induction motors (capacitor type) or brushless DC motor fans, with or without speed regulators/remote control devices[cite: 11]. The manual details sampling guidelines, grouping rules, list of required test equipment (such as tachometers and vane anemometers), and the scheme of inspection and testing (QAP) including safety, performance, and electrical insulation tests[cite: 11]."
+  },
+  {
+    "id": "IS_3650",
+    "standard_no": "IS 3650:2026",
+    "title": "Combination Side Cutting Pliers",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Hand Tools",
+    "last_revised": "2026",
+    "content": "IS 3650:2026 covers requirements for combination side cutting pliers classified across various nominal sizes (160 mm to 250 mm), handle types (insulated/uninsulated), and materials for head, handle, and rivets (chrome vanadium, chrome steel, carbon steel)[cite: 12]. The product manual provides sampling rules, list of test equipment (e.g., hardness tester, torsion test apparatus, insulation tester), and control levels for dimensional, mechanical, hardness, cutting, and insulation testing[cite: 12]."
+  },
+  {
+    "id": "IS_11652",
+    "standard_no": "IS 11652: 2017",
+    "title": "Textiles - High Density Polyethylene (HDPE)/ Polypropylene (PP) Woven Sacks for Packaging of 50 kg Cement - Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Textiles & Packaging",
+    "last_revised": "2025",
+    "content": "IS 11652: 2017 specifies requirements for HDPE and PP woven sacks used for packaging 50 kg cement, including options for gusseting, lamination, and UV stabilization[cite: 13]. The manual details raw material compliance, required testing apparatus (tensile testing machines, drop impact apparatus, muffle furnace, UV test chambers), and quality assurance control levels for parameters such as breaking strength, drop impact, ash content, and seam strength[cite: 13]."
+  },
+  {
+    "id": "IS_303",
+    "standard_no": "IS 303: 2024",
+    "title": "Plywood for General Purpose",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Wood & Timber Products",
+    "last_revised": "2026",
+    "content": "IS 303: 2024 covers general-purpose plywood classified by grades (MR, BWR, BWP), bending classes (10 to 50), appearance types (AA to CC), thickness ranges, and formaldehyde classes (E1/E2)[cite: 14]. The manual outlines grouping guidelines for licensing, laboratory test equipment requirements (hot air oven, tensile testing machine, water bath, extraction apparatus), and inspection and testing levels for moisture content, water resistance, static bending strength, and formaldehyde emission[cite: 14]."
+  },
+  {
+    "id": "IS_4003_PT1",
+    "standard_no": "IS 4003 (Part 1):2026",
+    "title": "Pipe Wrenches (General Purpose)",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Hand Tools",
+    "last_revised": "2026",
+    "content": "IS 4003 (Part 1):2026 specifies general-purpose pipe wrenches across nominal sizes ranging from 200 mm to 1200 mm[cite: 15]. The manual details raw material requirements, grouping guidelines (testing lowest and highest nominal sizes to cover the range), essential testing equipment (test rigs, torque testers, hardness testing machines), and quality assurance inspection procedures including static load and static shock load tests[cite: 15]."
+  },
+  {
+    "id": "IS_6149",
+    "standard_no": "IS 6149: 2025",
+    "title": "Single-Ended Open-Jaw Adjustable Wrenches Specification",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Hand Tools",
+    "last_revised": "2026",
+    "content": "IS 6149: 2025 specifies requirements for single-ended open-jaw adjustable wrenches classified by Type (A/B), Grade (1/2), and various nominal sizes[cite: 41]. The product manual outlines sampling and grouping guidelines, listing required test equipment such as micrometers, Rockwell hardness testers, and torque wrenches, alongside quality control testing procedures covering dimensions, hardness, play, and torque[cite: 41]."
+  },
+  {
+    "id": "IS_4250",
+    "standard_no": "IS 4250: 1980",
+    "title": "Domestic Electric Food Mixers (Liquidizers & Grinders) and Centrifugal Juicers",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2020",
+    "content": "IS 4250: 1980 covers requirements for domestic electric food mixers, liquidizers, grinders, and centrifugal juicers[cite: 42]. The product manual provides sampling and grouping guidelines based on input wattage, voltage, and capacity, and details required test equipment (jointed test finger, humidity chamber, high voltage test panel) and inspection levels for electric shock protection, temperature rise, mechanical hazards, and operational performance[cite: 42]."
+  },
+  {
+    "id": "IS_302_2_30",
+    "standard_no": "IS 302-2-30: 2007",
+    "title": "Safety of Household and Similar Electrical Appliances - Part 2 Particular Requirements Section 30 Room Heaters",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Appliances",
+    "last_revised": "2023",
+    "content": "IS 302-2-30: 2007 covers safety requirements for household room heaters, including convector, fan, radiant, tubular, panel, and liquid-filled types[cite: 43]. The manual details grouping guidelines (categorized up to and above 1000 W), required laboratory test apparatus (thermocouples, high voltage tester, ball pressure apparatus), and quality control levels for parameters such as earth continuity, heating, leakage current, and protection against live parts[cite: 43]."
+  },
+  {
+    "id": "IS_694",
+    "standard_no": "IS 694: 2010",
+    "title": "Polyvinyl Chloride Insulated Unsheathed and Sheathed Cables/Cords with Rigid and Flexible Conductor for Rated Voltages Up To and Including 1100 V",
+    "scheme": "Product Certification Scheme (ISI Mark)",
+    "category": "Electrical Cables & Wires",
+    "last_revised": "2025",
+    "content": "IS 694: 2010 specifies requirements for PVC insulated cables and cords with rigid or flexible conductors (copper/aluminum) rated up to 1100 V[cite: 44]. The product manual provides grouping rules based on conductor material, number of cores, insulation/sheath types, and cable categories (01, 02, FR, FR-LSH), along with test apparatus requirements (Kelvin double bridge, spark tester, flammability test apparatus) and control levels for insulation resistance, tensile strength, hot deformation, and flammability[cite: 44]."
+  }
+]
