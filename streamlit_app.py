@@ -6,6 +6,9 @@ RAG Chat, MSME Self-Audit Calculators, and auto-healing state management.
 
 import streamlit as st
 from app_features import EnhancedBISAssistant
+from dotenv import load_dotenv
+
+load_dotenv()
 
 st.set_page_config(page_title="BIS Compliance Assistant", layout="wide")
 st.title("Bureau of Indian Standards (BIS) AI Assistant")
