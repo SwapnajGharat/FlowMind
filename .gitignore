@@ -1,0 +1,26 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Streamlit local settings
+.streamlit/secrets.toml
+
+# Environment Variables
+.env
+
+# Database / Vector Store (Ignore if recreated dynamically at setup)
+# Remove chroma_db below if you want to ship pre-indexed vector data directly
+chroma_db/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
