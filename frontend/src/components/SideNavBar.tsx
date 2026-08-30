@@ -8,23 +8,35 @@ import {
   BarChart3, 
   Settings, 
   HelpCircle, 
-  Plus 
+  Plus,
+  MessageSquarePlus,
+  RefreshCw,
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react';
 
 interface SideNavBarProps {
   currentScreen: ScreenView;
   onNavigate: (screen: ScreenView) => void;
   onNewAnalysisClick: () => void;
+  onNewChatClick: () => void;
+  onResetWorkspace: () => void;
   onOpenSettings: () => void;
   onOpenSupport: () => void;
+  isCollapsed: boolean;
+  onToggleCollapsed: () => void;
 }
 
 export const SideNavBar: React.FC<SideNavBarProps> = ({
   currentScreen,
   onNavigate,
   onNewAnalysisClick,
+  onNewChatClick,
+  onResetWorkspace,
   onOpenSettings,
   onOpenSupport,
+  isCollapsed,
+  onToggleCollapsed,
 }) => {
   const navItems = [
     {
@@ -60,33 +72,43 @@ export const SideNavBar: React.FC<SideNavBarProps> = ({
   ];
 
   return (
-    <aside className="bg-[#F7F9FB] border-r border-[#E2E8F0] fixed left-0 top-16 h-[calc(100vh-64px)] w-64 flex flex-col z-40 text-[#001e40] select-none transition-colors duration-200">
+    <aside className={`bg-[#F7F9FB] border-r border-[#E2E8F0] fixed left-0 top-16 h-[calc(100vh-64px)] ${isCollapsed ? 'w-16' : 'w-64'} flex flex-col z-40 text-[#001e40] select-none transition-all duration-200`}>
       {/* Portal Header */}
-      <div className="p-6 border-b border-[#E2E8F0]">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={`${isCollapsed ? 'p-2' : 'p-6'} border-b border-[#E2E8F0]`}>
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 mb-4'}`}>
           <img
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY0euhpPuqSL4YXg5pNrrwI-wgxiWrANXZd7Cix9rsvevmXzPKJCnIEP1ZOugAQbRmnOSd4zCD5F5giXvY9aTctlNHthaL0UI84PO_EUo0dGbMDjVT6S_LsinuKVKQ7pPW0_1qcJygtc3vOFjGyvi_SMIOCWk-9qqB_iQzExAP1I4kFijCYKv2oOZzHEt0WdIAFjrGR25LxRBiGIyjAkqQEc65xqVE7SEEg1FnTdvsuVET6znppf9KMw"
             alt="BIS Official Seal"
             className="w-12 h-12 object-contain"
           />
-          <div>
+          {!isCollapsed && <div>
             <h2 className="text-xl font-black text-[#001e40] tracking-tight leading-tight">
               BIS Portal
             </h2>
             <p className="text-[11px] font-mono uppercase tracking-wider text-[#475569]">
               Government of India
             </p>
-          </div>
+          </div>}
         </div>
 
-        {/* New Analysis Primary Button */}
+        <div className={`${isCollapsed ? 'mt-2 flex flex-col gap-2' : 'space-y-2'}`}>
+        <button
+          onClick={onNewChatClick}
+          title="New chat"
+          className={`bg-[#001e40] hover:bg-[#003366] text-white font-mono text-[13px] font-semibold py-2.5 ${isCollapsed ? 'w-full px-0' : 'w-full px-4'} rounded uppercase tracking-wider transition-all flex items-center justify-center gap-2`}
+        >
+          <MessageSquarePlus className="w-4 h-4" />
+          {!isCollapsed && <span>New Chat</span>}
+        </button>
         <button
           onClick={onNewAnalysisClick}
-          className="w-full bg-[#bb0013] hover:bg-[#93000d] text-white font-mono text-[13px] font-semibold py-2.5 px-4 rounded uppercase tracking-wider transition-all shadow-[0_2px_6px_rgba(187,0,19,0.15)] flex items-center justify-center gap-2 active:scale-[0.98]"
+          title="Start a new product analysis"
+          className={`bg-[#bb0013] hover:bg-[#93000d] text-white font-mono text-[13px] font-semibold py-2.5 ${isCollapsed ? 'w-full px-0' : 'w-full px-4'} rounded uppercase tracking-wider transition-all shadow-[0_2px_6px_rgba(187,0,19,0.15)] flex items-center justify-center gap-2 active:scale-[0.98]`}
         >
           <Plus className="w-4 h-4" />
-          <span>New Analysis</span>
+          {!isCollapsed && <span>New Analysis</span>}
         </button>
+        </div>
       </div>
 
       {/* Main Navigation Links */}
@@ -99,14 +121,15 @@ export const SideNavBar: React.FC<SideNavBarProps> = ({
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`flex items-center gap-4 px-6 py-3.5 text-left font-mono text-[13px] uppercase tracking-wider transition-colors duration-150 ${
+                title={isCollapsed ? item.label : undefined}
+                className={`flex items-center ${isCollapsed ? 'justify-center px-2' : 'gap-4 px-6'} py-3.5 text-left font-mono text-[13px] uppercase tracking-wider transition-colors duration-150 ${
                   isActive
                     ? 'text-[#001e40] font-bold border-r-4 border-[#bb0013] bg-[#f4f3f8]'
                     : 'text-[#475569] font-medium hover:bg-[#eeedf2] hover:text-[#001e40]'
                 }`}
               >
                 <Icon className={`w-5 h-5 ${isActive ? 'text-[#001e40] stroke-[2.2]' : 'text-[#475569]'}`} />
-                <span>{item.label}</span>
+                {!isCollapsed && <span>{item.label}</span>}
               </button>
             );
           })}
@@ -116,19 +139,29 @@ export const SideNavBar: React.FC<SideNavBarProps> = ({
       {/* Bottom Settings / Support */}
       <div className="border-t border-[#E2E8F0] p-3">
         <nav className="flex flex-col gap-1">
+          <button onClick={onToggleCollapsed} title={isCollapsed ? 'Expand sidebar' : 'Minimize sidebar'} className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-4 px-4'} py-2 text-left text-[#475569] font-mono text-[11px] uppercase tracking-wider font-medium hover:bg-[#eeedf2] hover:text-[#001e40] rounded transition-colors duration-150`}>
+            {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+            {!isCollapsed && <span>Minimize</span>}
+          </button>
+          <button onClick={onResetWorkspace} title="Start a fresh workspace" className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-4 px-4'} py-2 text-left text-[#475569] font-mono text-[11px] uppercase tracking-wider font-medium hover:bg-[#eeedf2] hover:text-[#001e40] rounded transition-colors duration-150`}>
+            <RefreshCw className="w-4 h-4" />
+            {!isCollapsed && <span>Reset Workspace</span>}
+          </button>
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-4 px-4 py-2 text-left text-[#475569] font-mono text-[11px] uppercase tracking-wider font-medium hover:bg-[#eeedf2] hover:text-[#001e40] rounded transition-colors duration-150"
+            title="Settings"
+            className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-4 px-4'} py-2 text-left text-[#475569] font-mono text-[11px] uppercase tracking-wider font-medium hover:bg-[#eeedf2] hover:text-[#001e40] rounded transition-colors duration-150`}
           >
             <Settings className="w-4 h-4 text-[#475569]" />
-            <span>Settings</span>
+            {!isCollapsed && <span>Settings</span>}
           </button>
           <button
             onClick={onOpenSupport}
-            className="flex items-center gap-4 px-4 py-2 text-left text-[#475569] font-mono text-[11px] uppercase tracking-wider font-medium hover:bg-[#eeedf2] hover:text-[#001e40] rounded transition-colors duration-150"
+            title="Support"
+            className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-4 px-4'} py-2 text-left text-[#475569] font-mono text-[11px] uppercase tracking-wider font-medium hover:bg-[#eeedf2] hover:text-[#001e40] rounded transition-colors duration-150`}
           >
             <HelpCircle className="w-4 h-4 text-[#475569]" />
-            <span>Support</span>
+            {!isCollapsed && <span>Support</span>}
           </button>
         </nav>
       </div>

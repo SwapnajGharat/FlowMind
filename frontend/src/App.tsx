@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScreenView, ChecklistItem, ChatMessage, AuditDeviation, LabFacility } from './types';
 import { 
   INITIAL_CHECKLIST, 
-  LAB_FACILITIES, 
-  INITIAL_CHAT_MESSAGES,
-  CATEGORY_STANDARDS_MAP 
+  LAB_FACILITIES,
 } from './data/mockData';
+import { api } from './api';
 
 import { TopNavBar } from './components/TopNavBar';
 import { SideNavBar } from './components/SideNavBar';
@@ -20,6 +19,7 @@ import { ClauseDetailModal } from './components/ClauseDetailModal';
 import { ScheduleModal } from './components/ScheduleModal';
 
 export default function App() {
+  const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
   // Primary view state - defaults to checklist dashboard or can switch to any screen
   const [currentScreen, setCurrentScreen] = useState<ScreenView>('checklist');
 
@@ -27,10 +27,10 @@ export default function App() {
   const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>(INITIAL_CHECKLIST);
 
   // Chat conversation state
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(INITIAL_CHAT_MESSAGES);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
   // Lab facilities state
-  const [labs] = useState<LabFacility[]>(LAB_FACILITIES);
+  const [labs, setLabs] = useState<LabFacility[]>(LAB_FACILITIES);
 
   // Global search input
   const [globalSearch, setGlobalSearch] = useState<string>('');
@@ -41,6 +41,34 @@ export default function App() {
   const [scheduleTestTitle, setScheduleTestTitle] = useState<string>('Thermal Stress Test');
   const [settingsModalOpen, setSettingsModalOpen] = useState<boolean>(false);
   const [supportModalOpen, setSupportModalOpen] = useState<boolean>(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [analysisKey, setAnalysisKey] = useState(0);
+
+  const startFreshWorkspace = (screen: ScreenView = 'checklist') => {
+    setSessionId(crypto.randomUUID());
+    setChatMessages([]);
+    setChecklistItems(INITIAL_CHECKLIST);
+    setLabs(LAB_FACILITIES);
+    setGlobalSearch('');
+    setAnalysisKey((key) => key + 1);
+    setCurrentScreen(screen);
+  };
+
+  useEffect(() => {
+    const category = globalSearch.trim();
+    if (!category) return;
+    api.findRagLabs(sessionId, category).then(({ labs: ragLabs }) => {
+      setLabs(ragLabs.map((lab, index) => ({
+        id: lab['Lab ID'] || `rag-lab-${index}`,
+        name: lab['Facility Name'] || 'Recognized Testing Facility',
+        distance: 'Contact facility', distanceNum: index + 1,
+        address: lab.Location || 'Regional Standard Laboratory', pinCode: 'N/A',
+        disciplines: [category], status: 'Active Accreditation',
+        coordinates: { x: 25 + ((index * 23) % 55), y: 30 + ((index * 17) % 45) },
+        phone: 'Contact facility', email: 'Not listed', incharge: 'Not listed', leadTimeDays: 7,
+      })));
+    }).catch((error) => console.error('Unable to search RAG labs:', error));
+  }, [globalSearch, sessionId]);
 
   // Toggle checklist item status (Pending -> In Progress -> Complete -> Pending)
   const handleToggleItem = (id: string) => {
@@ -51,87 +79,29 @@ export default function App() {
         if (item.status === 'pending') nextStatus = 'in_progress';
         else if (item.status === 'in_progress') nextStatus = 'complete';
         else nextStatus = 'pending';
+        api.updateChecklist(sessionId, id, nextStatus).catch((error) => console.error('Unable to save checklist change:', error));
         return { ...item, status: nextStatus };
       })
     );
   };
 
   // Chat message sending
-  const handleSendMessage = (text: string) => {
-    const userMsg: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      sender: 'user',
-      text,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
+  const handleSendMessage = async (text: string) => {
+    try {
+      const { user, reply } = await api.sendChat(sessionId, text);
+      setChatMessages((prev) => [...prev, user, reply]);
+    } catch (error) {
+      console.error('Unable to save chat message:', error);
+    }
+  };
 
-    setChatMessages((prev) => [...prev, userMsg]);
-
-    // Generate context-aware AI auditor response
-    setTimeout(() => {
-      let replyText = '';
-      let replyDeviations: AuditDeviation[] | undefined;
-      let replyStandard: string | undefined;
-
-      const lower = text.toLowerCase();
-
-      if (lower.includes('cement') || lower.includes('1489')) {
-        replyText = 'Auditing cement specification against IS 1489 (Part 1): 2015 (Portland Pozzolana Cement). Chemical and physical benchmarks verified:';
-        replyStandard = 'IS 1489 (Part 1): 2015';
-        replyDeviations = [
-          {
-            section: 'Cl. 7.1: Compressive Strength',
-            title: '28-Day Strength Threshold',
-            status: 'pass',
-            description: 'Achieved 44.5 MPa vs minimum requirement of 33.0 MPa.',
-            clauseRef: 'IS 1489 (Part 1) Table 2',
-            clauseDetail: 'Compressive strength of standard mortar cubes shall not be less than 16 MPa at 3 days, 22 MPa at 7 days, and 33 MPa at 28 days.'
-          },
-          {
-            section: 'Cl. 8.2: Pozzolana Content',
-            title: 'Fly Ash Percentage Ratio',
-            status: 'pass',
-            description: 'Fly ash proportion declared at 28.5%, within statutory 15% to 35% range.',
-            clauseRef: 'Clause 8.2 - Mineral Admixtures',
-            clauseDetail: 'The addition of pozzolana shall not be less than 15 percent and not more than 35 percent by mass of Portland Pozzolana Cement.'
-          },
-          {
-            section: 'Cl. 6.3: Insoluble Residue',
-            title: 'Chemical Insoluble Residue Limit',
-            status: 'warning',
-            description: 'Sample showed 3.8% insoluble residue, approaching maximum ceiling of 4.0%.',
-            clauseRef: 'Table 1 - Chemical Requirements',
-            clauseDetail: 'Total insoluble residue by mass shall not exceed [X + (100 - X) / 100] percent where X is declared percentage of pozzolana.'
-          }
-        ];
-      } else if (lower.includes('isi') || lower.includes('dimension') || lower.includes('mark')) {
-        replyText = 'Under the BIS (Conformity Assessment) Regulations 2018, the Standard Mark consists of the BIS monogram accompanied by the relevant Indian Standard number (e.g. IS 5120) and unique License Number (CM/L-XXXXXXX). The height-to-width ratio of the gear wheel monogram must strictly conform to BIS Drawing No. HQ/MAR/101.';
-        replyStandard = 'BIS Marking Guidelines';
-      } else if (lower.includes('crs') || lower.includes('13252')) {
-        replyText = 'Compulsory Registration Scheme (CRS) for electronics under IS 13252 (Part 1) requires testing at BIS-recognized NABL labs. Samples must undergo electric strength (3 kV AC), touch leakage (<3.5 mA), and flame retardancy tests. Once certified, affix the "Self Declaration - Conforming to IS 13252" tag with registration R-number.';
-        replyStandard = 'IS 13252 (Part 1): 2010';
-      } else {
-        replyText = `Analysis logged for query: "${text}". Technical clauses cross-referenced against Bureau of Indian Standards standards repository. All manufacturing controls must comply with the approved Scheme of Testing and Inspection (STI).`;
-      }
-
-      const botMsg: ChatMessage = {
-        id: `bot-${Date.now()}`,
-        sender: 'assistant',
-        text: replyText,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        standardRef: replyStandard,
-        isAuditReport: Boolean(replyDeviations),
-        deviations: replyDeviations,
-        actions: replyDeviations
-          ? [
-              { label: 'Generate Report', action: 'generate_report', variant: 'secondary' },
-              { label: 'Draft Action Plan', action: 'draft_action_plan', variant: 'primary' },
-            ]
-          : undefined,
-      };
-
-      setChatMessages((prev) => [...prev, botMsg]);
-    }, 600);
+  const handleVoiceUpload = async (audio: File) => {
+    try {
+      const { user, reply } = await api.sendVoice(sessionId, audio);
+      setChatMessages((prev) => [...prev, user, reply]);
+    } catch (error) {
+      console.error('Unable to process voice query:', error);
+    }
   };
 
   // Draft Action Plan handler
@@ -143,10 +113,12 @@ export default function App() {
       text: 'Corrective Action Plan Drafted for IS 5120:1977 Non-Conformities:\n\n1. Hydrostatic Test Rig Recalibration (Clause 5.2.1): Adjust test bench relief valves from 1.2x to 1.5x working pressure (24 bar minimum sustained for 15 minutes). Issue updated test certificate.\n\n2. Casting Drawing Revision (Clause 7.1): Update Drawing #PMP-REV-D to incorporate cast relief BIS monogram (30mm x 25mm) with licensee placeholder CM/L-XXXXXXX and rotational flow arrow.\n\n3. Schedule Re-audit: Submit amended QAP to BIS Northern Regional Office within 14 working days.',
     };
     setChatMessages((prev) => [...prev, actionPlanMsg]);
+    api.recordActivity(sessionId, 'action_plan_drafted', { message: actionPlanMsg.text }).catch(console.error);
   };
 
   // Generate Report action
   const handleGenerateReport = () => {
+    api.recordActivity(sessionId, 'report_viewed', {}).catch(console.error);
     setCurrentScreen('reports');
   };
 
@@ -162,16 +134,25 @@ export default function App() {
   };
 
   // Audit in Assistant from Product Analysis
-  const handleAuditInAssistant = (category: string, specText: string) => {
+  const handleAuditInAssistant = async (category: string, specText: string) => {
     setCurrentScreen('assistant');
-    handleSendMessage(`Please audit the following specifications for category ${category}: ${specText}`);
+    const query = `Create a compliance checklist for ${category}: ${specText}`;
+    try {
+      const { data } = await api.runAudit(sessionId, query);
+      setChatMessages((prev) => [...prev, {
+        id: `audit-${Date.now()}`, sender: 'assistant', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        text: JSON.stringify(data, null, 2),
+      }]);
+    } catch (error) {
+      console.error('Unable to generate RAG audit:', error);
+    }
   };
 
   // Is current screen a standalone login/signin view?
   const isAuthScreen = currentScreen === 'login_minimal' || currentScreen === 'signin_card';
 
   return (
-    <div className="min-h-screen bg-[#F9F9FE] text-[#0F172A] font-body flex flex-col antialiased">
+    <div className="min-h-screen bg-[#F9F9FE] text-[#0F172A] font-body flex flex-col antialiased" style={{ '--sidebar-width': sidebarCollapsed ? '4rem' : '16rem' } as React.CSSProperties}>
       {/* If not standalone auth screen, render TopNavBar and SideNavBar */}
       {!isAuthScreen && (
         <>
@@ -190,9 +171,16 @@ export default function App() {
           <SideNavBar
             currentScreen={currentScreen}
             onNavigate={setCurrentScreen}
-            onNewAnalysisClick={() => setCurrentScreen('product_analysis')}
+            onNewAnalysisClick={() => {
+              setAnalysisKey((key) => key + 1);
+              setCurrentScreen('product_analysis');
+            }}
+            onNewChatClick={() => startFreshWorkspace('assistant')}
+            onResetWorkspace={() => startFreshWorkspace('checklist')}
             onOpenSettings={() => setSettingsModalOpen(true)}
             onOpenSupport={() => setSupportModalOpen(true)}
+            isCollapsed={sidebarCollapsed}
+            onToggleCollapsed={() => setSidebarCollapsed((collapsed) => !collapsed)}
           />
         </>
       )}
@@ -226,6 +214,7 @@ export default function App() {
         <AssistantChat
           messages={chatMessages}
           onSendMessage={handleSendMessage}
+          onVoiceUpload={handleVoiceUpload}
           onViewClause={(dev) => setSelectedDeviation(dev)}
           onGenerateReport={handleGenerateReport}
           onDraftActionPlan={handleDraftActionPlan}
@@ -241,9 +230,12 @@ export default function App() {
       )}
 
       {currentScreen === 'product_analysis' && (
-        <ProductAnalysis
+      <ProductAnalysis
+          key={analysisKey}
           onNavigate={setCurrentScreen}
           onAuditInAssistant={handleAuditInAssistant}
+          onAnalysisComplete={(analysis) => api.saveProductAnalysis(sessionId, analysis).catch(console.error)}
+          onRagLookup={(query) => api.productLookup(sessionId, query).then(({ details }) => details)}
         />
       )}
 
@@ -268,7 +260,8 @@ export default function App() {
           labs={labs}
           isOpen={scheduleModalOpen}
           onClose={() => setScheduleModalOpen(false)}
-          onConfirm={(booking) => {
+          onConfirm={async (booking) => {
+            try { await api.createBooking(sessionId, booking); } catch (error) { console.error('Unable to save booking:', error); }
             // Update the corresponding checklist item status to 'in_progress'
             setChecklistItems((prev) =>
               prev.map((item) =>

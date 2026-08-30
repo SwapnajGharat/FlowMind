@@ -45,7 +45,7 @@ export const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
   const labItems = items.filter((i) => i.section === 'Laboratory Testing');
 
   return (
-    <main className="ml-0 md:ml-64 pt-16 min-h-screen bg-[#F9F9FE] flex flex-col justify-between">
+    <main className="ml-0 md:ml-[var(--sidebar-width)] pt-16 min-h-screen bg-[#F9F9FE] flex flex-col justify-between">
       <div className="p-6 lg:p-10 max-w-[1280px] mx-auto w-full">
         {/* Header */}
         <header className="mb-8">

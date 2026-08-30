@@ -16,11 +16,15 @@ import {
 interface ProductAnalysisProps {
   onNavigate: (screen: ScreenView) => void;
   onAuditInAssistant: (category: string, specText: string) => void;
+  onAnalysisComplete: (analysis: { category: string; productTitle: string; specifications: string; result: ProductAnalysisResult }) => void;
+  onRagLookup: (query: string) => Promise<string>;
 }
 
 export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
   onNavigate,
   onAuditInAssistant,
+  onAnalysisComplete,
+  onRagLookup,
 }) => {
   const [category, setCategory] = useState<string>('machinery');
   const [productTitle, setProductTitle] = useState<string>('Industrial Centrifugal & Sump Pump Series-X');
@@ -31,18 +35,23 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
   const [analysisResult, setAnalysisResult] = useState<ProductAnalysisResult>(
     CATEGORY_STANDARDS_MAP['machinery']
   );
+  const [ragDetails, setRagDetails] = useState('');
 
-  const handleAnalyze = (e: React.FormEvent) => {
+  const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsAnalyzing(true);
-    setTimeout(() => {
-      setAnalysisResult(CATEGORY_STANDARDS_MAP[category] || CATEGORY_STANDARDS_MAP['machinery']);
+    try {
+      const result = CATEGORY_STANDARDS_MAP[category] || CATEGORY_STANDARDS_MAP['machinery'];
+      setAnalysisResult(result);
+      onAnalysisComplete({ category, productTitle, specifications: specsText, result });
+      setRagDetails(await onRagLookup(`${productTitle}. ${specsText}`));
+    } finally {
       setIsAnalyzing(false);
-    }, 600);
+    }
   };
 
   return (
-    <main className="ml-0 md:ml-64 pt-16 min-h-screen bg-[#F9F9FE] flex flex-col justify-between select-none">
+    <main className="ml-0 md:ml-[var(--sidebar-width)] pt-16 min-h-screen bg-[#F9F9FE] flex flex-col justify-between select-none">
       <div className="p-6 lg:p-10 max-w-[1280px] mx-auto w-full">
         {/* Header */}
         <header className="mb-8">
@@ -190,6 +199,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
               <h2 className="text-2xl font-bold text-[#001e40]">
                 {analysisResult.matchedStandard}
               </h2>
+              {ragDetails && <p className="mt-3 text-sm leading-relaxed text-slate-700 whitespace-pre-line">{ragDetails}</p>}
               <p className="text-sm font-medium text-slate-700 mt-1">
                 {analysisResult.standardTitle}
               </p>

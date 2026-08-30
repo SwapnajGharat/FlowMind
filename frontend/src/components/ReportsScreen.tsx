@@ -80,7 +80,7 @@ export const ReportsScreen: React.FC = () => {
   const activeReport = reports.find((r) => r.id === selectedReportId) || reports[0];
 
   return (
-    <main className="ml-0 md:ml-64 pt-16 min-h-screen bg-[#F9F9FE] flex flex-col justify-between select-none">
+    <main className="ml-0 md:ml-[var(--sidebar-width)] pt-16 min-h-screen bg-[#F9F9FE] flex flex-col justify-between select-none">
       <div className="p-6 lg:p-10 max-w-[1280px] mx-auto w-full">
         {/* Header */}
         <header className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

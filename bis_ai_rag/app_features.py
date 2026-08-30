@@ -1,44 +1,46 @@
 """
 app_features.py
-Backend logic for the Bureau of Indian Standards (BIS) AI Assistant using Google AI Studio (Gemini).
+Backend logic for the Bureau of Indian Standards (BIS) AI Assistant using Groq.
 """
 
 import os
 import re
 import json
+import tempfile
+from pathlib import Path
 from typing import List, Dict, Any
-import google.generativeai as genai
 import chromadb
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
+from groq import Groq
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 
 
 class EnhancedBISAssistant:
-    def __init__(self, db_path: str = "./chroma_db", collection_name: str = "bis_knowledge_base", api_key: str = None):
-        # Resolve API Key securely from argument or environment variable
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    def __init__(self, db_path: str | Path = BASE_DIR / "chroma_db", collection_name: str = "bis_knowledge_base", api_key: str = None):
+        # Resolve the Groq key securely from an argument or environment variable.
+        self.api_key = api_key or os.getenv("GROQ_API_KEY")
         if not self.api_key:
-            raise ValueError("GEMINI_API_KEY or GOOGLE_API_KEY environment variable is missing.")
+            raise ValueError("GROQ_API_KEY environment variable is missing.")
         
-        # Configure Google Generative AI
-        genai.configure(api_key=self.api_key)
+        self.groq_client = Groq(api_key=self.api_key)
         self.chat_history: List[Dict[str, str]] = []
 
         self.embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name="all-MiniLM-L6-v2"
         )
 
-        self.chroma_client = chromadb.PersistentClient(path=db_path)
+        self.chroma_client = chromadb.PersistentClient(path=str(db_path))
         self.collection = self.chroma_client.get_or_create_collection(
             name=collection_name, 
             embedding_function=self.embedding_fn
         )
 
     def _get_active_model(self) -> str:
-        """Returns the official Google Gemini model endpoint."""
-        return "gemini-2.5-flash"
+        """Returns the Groq chat model configured for RAG responses."""
+        return os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
     def retrieve(self, query: str, top_k: int = 6) -> List[Dict[str, Any]]:
         """Queries ChromaDB vector collection and returns deduplicated context chunks."""
@@ -83,13 +85,21 @@ class EnhancedBISAssistant:
         prompt = f"{system_prompt}\n\nContext:\n{context_str}\n\nQuestion: {user_query}"
 
         try:
-            model = genai.GenerativeModel(self._get_active_model())
-            response = model.generate_content(prompt)
-            
-            answer = response.text.strip() if response.text else "I searched the knowledge base, but could not generate a response."
+            response = self.groq_client.chat.completions.create(
+                model=self._get_active_model(),
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.2,
+                max_tokens=900,
+            )
+            answer = (response.choices[0].message.content or "").strip()
+            if not answer:
+                answer = "I searched the knowledge base, but could not generate a response."
 
         except Exception as e:
-            answer = f"Error communicating with Gemini API: {str(e)}"
+            answer = f"Error communicating with Groq API: {str(e)}"
 
         self.chat_history.append({"role": "user", "content": user_query})
         self.chat_history.append({"role": "assistant", "content": answer})
@@ -98,20 +108,29 @@ class EnhancedBISAssistant:
     # -------------------------------------------------------------------------
     # Feature 2: Voice Input Transcription
     # -------------------------------------------------------------------------
-    def transcribe_audio(self, audio_bytes: bytes, temp_filename: str = "temp_audio.wav") -> str:
-        with open(temp_filename, "wb") as f:
-            f.write(audio_bytes)
-            
+    def transcribe_audio(self, audio_bytes: bytes, temp_filename: str = "audio.webm") -> str:
+        """Transcribe an uploaded audio file using Groq Whisper."""
+        groq_api_key = os.getenv("GROQ_API_KEY")
+        if not groq_api_key:
+            return "Audio transcription failed: GROQ_API_KEY environment variable is missing."
+
+        suffix = Path(temp_filename).suffix or ".webm"
+        with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as temp_file:
+            temp_file.write(audio_bytes)
+            temp_path = temp_file.name
+
         try:
-            audio_file = genai.upload_file(path=temp_filename)
-            model = genai.GenerativeModel(self._get_active_model())
-            response = model.generate_content(["Please transcribe this audio accurately into text:", audio_file])
-            return response.text.strip()
+            with open(temp_path, "rb") as audio_file:
+                transcription = Groq(api_key=groq_api_key).audio.transcriptions.create(
+                    file=(temp_filename, audio_file.read()),
+                    model="whisper-large-v3-turbo",
+                )
+            return transcription.text.strip()
         except Exception as e:
             return f"Audio transcription failed: {str(e)}"
         finally:
-            if os.path.exists(temp_filename):
-                os.remove(temp_filename)
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
 
     # -------------------------------------------------------------------------
     # Feature 3: MSME Compliance Readiness Calculator & Audit Checklist
@@ -157,13 +176,17 @@ Return ONLY a raw JSON object formatted as follows:
 }}"""
 
         try:
-            model = genai.GenerativeModel(
-                self._get_active_model(),
-                generation_config={"response_mime_type": "application/json"}
+            response = self.groq_client.chat.completions.create(
+                model=self._get_active_model(),
+                messages=[
+                    {"role": "system", "content": "Return valid JSON only, with no Markdown fences or commentary."},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.1,
+                max_tokens=900,
+                response_format={"type": "json_object"},
             )
-            response = model.generate_content(prompt)
-            
-            raw_output = response.text or "{}"
+            raw_output = response.choices[0].message.content or "{}"
             clean_json = re.sub(r"```json|```", "", raw_output).strip()
             return json.loads(clean_json)
 

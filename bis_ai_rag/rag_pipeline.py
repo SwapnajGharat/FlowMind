@@ -6,6 +6,7 @@ Synthesizes and formats user-centric answers in a single pipeline execution.
 
 import os
 import re
+from pathlib import Path
 from typing import List, Dict, Any, cast
 import chromadb
 from chromadb.api.types import Embeddable, EmbeddingFunction
@@ -24,9 +25,10 @@ os.environ["NUMEXPR_NUM_THREADS"] = "1"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 
-DB_DIR = "./chroma_db"
+DB_DIR = BASE_DIR / "chroma_db"
 COLLECTION_NAME = "bis_knowledge_base"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
@@ -45,7 +47,7 @@ Format your output strictly using these sections:
 class BISPipeline:
     def __init__(self, top_k: int = 3):
         self.top_k = top_k
-        self.client = chromadb.PersistentClient(path=DB_DIR)
+        self.client = chromadb.PersistentClient(path=str(DB_DIR))
         
         embed_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name=EMBEDDING_MODEL
@@ -67,17 +69,24 @@ class BISPipeline:
             n_results=self.top_k
         )
         
-        formatted_chunks = []
-        if not results or not results["documents"]:
+        formatted_chunks: List[Dict[str, Any]] = []
+        if not results:
             return formatted_chunks
 
-        documents = results["documents"][0]
-        metadatas = results["metadatas"][0]
+        document_groups = results.get("documents")
+        metadata_groups = results.get("metadatas")
+        if not document_groups or document_groups[0] is None:
+            return formatted_chunks
+
+        documents = document_groups[0]
+        metadatas = metadata_groups[0] if metadata_groups and metadata_groups[0] else []
         
         for doc, meta in zip(documents, metadatas):
+            if doc is None:
+                continue
             formatted_chunks.append({
                 "content": doc,
-                "metadata": meta
+                "metadata": meta or {}
             })
             
         return formatted_chunks

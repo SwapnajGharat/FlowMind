@@ -12,12 +12,15 @@ import {
   FileText, 
   Info,
   Sparkles,
-  Download
+  Download,
+  Mic,
+  Square
 } from 'lucide-react';
 
 interface AssistantChatProps {
   messages: ChatMessage[];
   onSendMessage: (text: string) => void;
+  onVoiceUpload: (audio: File) => void;
   onViewClause: (deviation: AuditDeviation) => void;
   onGenerateReport: () => void;
   onDraftActionPlan: () => void;
@@ -26,12 +29,18 @@ interface AssistantChatProps {
 export const AssistantChat: React.FC<AssistantChatProps> = ({
   messages,
   onSendMessage,
+  onVoiceUpload,
   onViewClause,
   onGenerateReport,
   onDraftActionPlan,
 }) => {
   const [inputText, setInputText] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [sessionStarted] = useState(() => new Date());
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingStreamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -44,6 +53,35 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
     setInputText('');
   };
 
+  const toggleVoiceRecording = async () => {
+    if (isRecording && mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+      recordingStreamRef.current = stream;
+      recorder.ondataavailable = (event) => {
+        if (event.data.size) audioChunksRef.current.push(event.data);
+      };
+      recorder.onstop = () => {
+        const audio = new File([new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' })], 'voice-query.webm', { type: recorder.mimeType || 'audio/webm' });
+        recordingStreamRef.current?.getTracks().forEach((track) => track.stop());
+        recordingStreamRef.current = null;
+        onVoiceUpload(audio);
+      };
+      mediaRecorderRef.current = recorder;
+      recorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Microphone access was not available:', error);
+      alert('Microphone access is required to submit a voice query.');
+    }
+  };
+
   const samplePrompts = [
     'Audit cement batch against IS 1489 (Part 1)',
     'Explain ISI Mark mandatory dimensions',
@@ -51,13 +89,13 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
   ];
 
   return (
-    <main className="flex-1 ml-0 md:ml-64 flex flex-col h-[calc(100vh-64px)] mt-16 bg-[#F9F9FE] relative overflow-hidden">
+    <main className="flex-1 ml-0 md:ml-[var(--sidebar-width)] flex flex-col h-[calc(100vh-64px)] mt-16 bg-[#F9F9FE] relative overflow-hidden">
       {/* Chat History Canvas */}
       <div className="flex-1 overflow-y-auto px-4 md:px-8 py-8 max-w-4xl mx-auto w-full pb-44">
         {/* Session Timestamp Pill */}
         <div className="flex justify-center mb-8">
           <span className="bg-[#f4f3f8] text-[#475569] px-4 py-1 rounded-full text-[11px] font-mono uppercase tracking-wider border border-[#E2E8F0] shadow-2xs">
-            SESSION STARTED: OCT 24, 2024 - 10:42 AM
+            SESSION STARTED: {sessionStarted.toLocaleDateString()} - {sessionStarted.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>
 
@@ -254,6 +292,14 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
                   title="Attach Document"
                 >
                   <Paperclip className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleVoiceRecording}
+                  className={`p-1.5 rounded-md transition-colors ${isRecording ? 'bg-red-100 text-[#bb0013] animate-pulse' : 'hover:bg-[#eeedf2]'}`}
+                  title={isRecording ? 'Stop recording and send voice query' : 'Start voice query'}
+                >
+                  {isRecording ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                 </button>
                 <button
                   type="button"

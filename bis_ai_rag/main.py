@@ -45,7 +45,7 @@ async def chat_endpoint(req: QueryRequest):
 async def transcribe_endpoint(file: UploadFile = File(...)):
     try:
         audio_bytes = await file.read()
-        transcription = assistant.transcribe_audio(audio_bytes)
+        transcription = assistant.transcribe_audio(audio_bytes, file.filename or "audio.webm")
         return {"transcription": transcription}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
@@ -55,7 +55,7 @@ async def transcribe_endpoint(file: UploadFile = File(...)):
 async def voice_query_endpoint(file: UploadFile = File(...)):
     try:
         audio_bytes = await file.read()
-        transcribed_text = assistant.transcribe_audio(audio_bytes)
+        transcribed_text = assistant.transcribe_audio(audio_bytes, file.filename or "audio.webm")
         answer = assistant.ask_chat(transcribed_text)
         return {
             "transcription": transcribed_text,

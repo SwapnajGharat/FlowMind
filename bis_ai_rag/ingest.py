@@ -6,14 +6,16 @@ generates deterministic unique IDs to prevent collisions, and builds a persisten
 
 import json
 import os
+from pathlib import Path
 from typing import cast
 import chromadb
 from chromadb.api.types import Embeddable, EmbeddingFunction
 from chromadb.utils import embedding_functions
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-DATA_FILE = "sample_data.json"
-DB_DIR = "./chroma_db"
+BASE_DIR = Path(__file__).resolve().parent
+DATA_FILE = BASE_DIR / "sample_data.json"
+DB_DIR = BASE_DIR / "chroma_db"
 COLLECTION_NAME = "bis_knowledge_base"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
@@ -59,7 +61,7 @@ def build_vector_store():
     docs = load_documents(DATA_FILE)
     texts, ids, metadatas = chunk_documents(docs)
 
-    client = chromadb.PersistentClient(path=DB_DIR)
+    client = chromadb.PersistentClient(path=str(DB_DIR))
 
     try:
         client.delete_collection(COLLECTION_NAME)

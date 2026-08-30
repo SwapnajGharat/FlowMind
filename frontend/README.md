@@ -51,6 +51,16 @@ Run:
 npm run dev
 ```
 
+In a second terminal, start the local API and SQLite history store:
+
+```bash
+npm run server
+```
+
+The API runs at `http://localhost:3001`; Vite forwards `/api` requests to it.
+It creates `data/flowmind.sqlite` automatically and saves chat messages,
+checklist changes, lab bookings, product analyses, and activity history.
+
 The terminal will show a local address. Open the following address in a browser:
 
 ```text

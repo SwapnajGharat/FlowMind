@@ -59,7 +59,7 @@ export const LabFinder: React.FC<LabFinderProps> = ({
   const selectedLab = labs.find((l) => l.id === selectedLabId) || filteredLabs[0];
 
   return (
-    <main className="ml-0 md:ml-64 mt-16 flex-1 flex flex-col h-[calc(100vh-64px)] bg-[#F7F9FB] relative overflow-hidden select-none">
+    <main className="ml-0 md:ml-[var(--sidebar-width)] mt-16 flex-1 flex flex-col h-[calc(100vh-64px)] bg-[#F7F9FB] relative overflow-hidden select-none">
       {/* Global Search Header for Map */}
       <div className="w-full bg-white border-b border-[#E2E8F0] p-4 flex flex-wrap items-center gap-4 z-20 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
         <div className="flex-1 relative max-w-3xl min-w-[260px]">
