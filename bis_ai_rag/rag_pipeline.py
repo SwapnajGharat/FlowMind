@@ -92,17 +92,16 @@ class BISPipeline:
         return formatted_chunks
 
     def _get_active_model(self) -> str:
-        # Filter out guard, whisper, vision, and high-TPM preview models
+        # Filter out non-chat models.
         available_models = [
             m.id for m in self.groq_client.models.list().data 
-            if not any(x in m.id.lower() for x in ["guard", "whisper", "orpheus", "vision", "tool", "gpt-oss"])
+            if not any(x in m.id.lower() for x in ["guard", "whisper", "orpheus", "vision"])
         ]
         
         preferred_models = [
-            "llama-3.1-8b-instant",
-            "llama3-8b-8192",
-            "llama-3.3-70b-versatile",
-            "mixtral-8x7b-32768"
+            "openai/gpt-oss-120b",
+            "qwen/qwen3.6-27b",
+            "openai/gpt-oss-20b",
         ]
         
         return next((m for m in preferred_models if m in available_models), available_models[0])

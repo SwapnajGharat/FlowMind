@@ -17,7 +17,7 @@ Create a `.env` file in this folder containing your Groq API key:
 
 ```env
 GROQ_API_KEY=your_groq_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
 Build the local vector database after changing `sample_data.json`:

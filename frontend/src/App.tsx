@@ -28,6 +28,7 @@ export default function App() {
 
   // Chat conversation state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [isChatLoading, setIsChatLoading] = useState(false);
 
   // Lab facilities state
   const [labs, setLabs] = useState<LabFacility[]>(LAB_FACILITIES);
@@ -87,11 +88,36 @@ export default function App() {
 
   // Chat message sending
   const handleSendMessage = async (text: string) => {
+    if (isChatLoading) return;
+
+    const pendingUser: ChatMessage = {
+      id: `pending-${crypto.randomUUID()}`,
+      sender: 'user',
+      text,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+    setChatMessages((prev) => [...prev, pendingUser]);
+    setIsChatLoading(true);
+
     try {
       const { user, reply } = await api.sendChat(sessionId, text);
-      setChatMessages((prev) => [...prev, user, reply]);
+      setChatMessages((prev) => [
+        ...prev.map((message) => message.id === pendingUser.id ? user : message),
+        reply,
+      ]);
     } catch (error) {
       console.error('Unable to save chat message:', error);
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          id: `error-${crypto.randomUUID()}`,
+          sender: 'assistant',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          text: 'I could not complete that request. Please confirm the RAG backend is running and try again.',
+        },
+      ]);
+    } finally {
+      setIsChatLoading(false);
     }
   };
 
@@ -213,6 +239,7 @@ export default function App() {
       {currentScreen === 'assistant' && (
         <AssistantChat
           messages={chatMessages}
+          isLoading={isChatLoading}
           onSendMessage={handleSendMessage}
           onVoiceUpload={handleVoiceUpload}
           onViewClause={(dev) => setSelectedDeviation(dev)}

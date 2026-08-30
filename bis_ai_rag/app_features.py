@@ -40,7 +40,7 @@ class EnhancedBISAssistant:
 
     def _get_active_model(self) -> str:
         """Returns the Groq chat model configured for RAG responses."""
-        return os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        return os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
     def retrieve(self, query: str, top_k: int = 6) -> List[Dict[str, Any]]:
         """Queries ChromaDB vector collection and returns deduplicated context chunks."""
@@ -78,8 +78,12 @@ class EnhancedBISAssistant:
 
         system_prompt = (
             "You are an expert AI Assistant specialized in the Bureau of Indian Standards (BIS).\n"
-            "Use the provided standard context documents to answer the user accurately.\n"
-            "Provide clear, actionable details based on the standards provided."
+            "Use only the provided standard context documents; do not invent requirements, limits, or clauses.\n"
+            "Return the final answer only. Never reveal chain-of-thought, analysis, or reasoning.\n"
+            "Keep the response concise and practical: at most 180 words and no more than 5 bullet points.\n"
+            "Use clean Markdown only: short bold section titles and bullet points. Never use tables, HTML, or long introductions.\n"
+            "Prioritize the applicable standard, the most essential compliance checks, and one practical next step.\n"
+            "If the context does not answer the question, say so briefly and state what information is needed."
         )
 
         prompt = f"{system_prompt}\n\nContext:\n{context_str}\n\nQuestion: {user_query}"
@@ -92,9 +96,11 @@ class EnhancedBISAssistant:
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.2,
-                max_tokens=900,
+                max_tokens=350,
             )
-            answer = (response.choices[0].message.content or "").strip()
+            answer = re.sub(
+                r"<think>.*?</think>", "", response.choices[0].message.content or "", flags=re.DOTALL
+            ).strip()
             if not answer:
                 answer = "I searched the knowledge base, but could not generate a response."
 

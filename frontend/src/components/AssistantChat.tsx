@@ -14,11 +14,13 @@ import {
   Sparkles,
   Download,
   Mic,
-  Square
+  Square,
+  LoaderCircle
 } from 'lucide-react';
 
 interface AssistantChatProps {
   messages: ChatMessage[];
+  isLoading: boolean;
   onSendMessage: (text: string) => void;
   onVoiceUpload: (audio: File) => void;
   onViewClause: (deviation: AuditDeviation) => void;
@@ -28,6 +30,7 @@ interface AssistantChatProps {
 
 export const AssistantChat: React.FC<AssistantChatProps> = ({
   messages,
+  isLoading,
   onSendMessage,
   onVoiceUpload,
   onViewClause,
@@ -44,7 +47,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,6 +90,39 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
     'Explain ISI Mark mandatory dimensions',
     'How do I file for CRS under IS 13252?',
   ];
+
+  const renderInlineMarkdown = (text: string) => text.split(/(\*\*[^*]+\*\*)/g).map((part, index) =>
+    part.startsWith('**') && part.endsWith('**')
+      ? <strong key={index} className="font-semibold text-[#001e40]">{part.slice(2, -2)}</strong>
+      : <React.Fragment key={index}>{part}</React.Fragment>
+  );
+
+  const renderAnswer = (text: string) => {
+    const lines = text.split('\n').map((line) => line.trim()).filter(Boolean);
+    const content: React.ReactNode[] = [];
+    let bullets: string[] = [];
+    const flushBullets = () => {
+      if (!bullets.length) return;
+      content.push(
+        <ul key={`bullets-${content.length}`} className="my-2 list-disc space-y-1.5 pl-5 text-[15px] leading-relaxed marker:text-[#bb0013]">
+          {bullets.map((bullet, index) => <li key={index}>{renderInlineMarkdown(bullet)}</li>)}
+        </ul>
+      );
+      bullets = [];
+    };
+
+    lines.forEach((line) => {
+      const bullet = line.match(/^[-*]\s+(.+)/);
+      if (bullet) {
+        bullets.push(bullet[1]);
+        return;
+      }
+      flushBullets();
+      content.push(<p key={`line-${content.length}`} className="mb-2 text-[15px] leading-relaxed">{renderInlineMarkdown(line)}</p>);
+    });
+    flushBullets();
+    return content;
+  };
 
   return (
     <main className="flex-1 ml-0 md:ml-[var(--sidebar-width)] flex flex-col h-[calc(100vh-64px)] mt-16 bg-[#F9F9FE] relative overflow-hidden">
@@ -139,16 +175,16 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
 
                   {/* Message Prose */}
                   {msg.text && (
-                    <p className="text-[15px] text-[#0F172A] mb-6 leading-relaxed">
+                    <div className="text-[#0F172A] mb-6">
                       {msg.text.includes('2 Critical Deviations') ? (
                         <>
                           I have reviewed the provided technical specifications for the industrial pump series. The analysis indicates{' '}
                           <strong className="text-[#bb0013] font-semibold">2 Critical Deviations</strong> that require immediate attention prior to certification submission.
                         </>
                       ) : (
-                        msg.text
+                        renderAnswer(msg.text)
                       )}
-                    </p>
+                    </div>
                   )}
 
                   {/* Bento Grid Deviations */}
@@ -245,6 +281,17 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
               </div>
             );
           })}
+          {isLoading && (
+            <div className="flex gap-3.5 items-start" aria-live="polite">
+              <div className="w-8 h-8 rounded bg-[#003366] flex-shrink-0 flex items-center justify-center mt-1 text-white shadow-2xs">
+                <Bot className="w-4 h-4" />
+              </div>
+              <div className="bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-xs px-5 py-4 flex items-center gap-3 text-[#475569] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                <LoaderCircle className="w-4 h-4 animate-spin text-[#003366]" />
+                <span className="text-sm font-medium">Thinking through the compliance requirements…</span>
+              </div>
+            </div>
+          )}
           <div ref={chatEndRef} />
         </div>
       </div>
@@ -258,6 +305,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
               <button
                 key={idx}
                 onClick={() => onSendMessage(p)}
+                disabled={isLoading}
                 className="whitespace-nowrap bg-white/80 hover:bg-white text-[#475569] hover:text-[#001e40] text-[11px] font-mono px-3 py-1 rounded-full border border-[#E2E8F0] transition-colors shadow-2xs"
               >
                 + {p}
@@ -271,6 +319,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
           >
             <textarea
               value={inputText}
+              disabled={isLoading}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -313,6 +362,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
 
               <button
                 type="submit"
+                disabled={isLoading || !inputText.trim()}
                 className="bg-[#ED1C24] hover:bg-[#bb0013] text-white w-8 h-8 rounded flex items-center justify-center transition-all shadow-xs active:scale-95 cursor-pointer"
                 title="Send Audit Query"
               >
